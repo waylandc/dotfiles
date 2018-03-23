@@ -26,10 +26,10 @@ fi
 
 if [ -f "$HOME/.tmux.conf" ]; then
   if [ -L "$HOME/.tmux.conf" ]; then
-    ln -sf $PWD/.tmux.conf $HOME/.tmux.conf
+    ln -sf $PWD/.tmux/slim.tmux.conf $HOME/.tmux.conf
   else
     echo "ERROR: $HOME/.tmux.conf is a file, NOT a symlink. Check or remove before retrying\n"
   fi
 else
-  ln -sf $PWD/.tmux.conf $HOME/.tmux.conf
+  ln -sf $PWD/.tmux/slim.tmux.conf $HOME/.tmux.conf
 fi

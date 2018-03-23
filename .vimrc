@@ -38,6 +38,8 @@ set sidescrolloff=4 "start scrolling horizontally when 4 lines from edge
 syntax enable " syntax highlighting
 set ruler " Ruler on
 set number relativenumber " Line numbers on
+set autoread " if file changed since opening, auto read it
+
 " only use relativenumber on window with focus
 :augroup numbertoggle
 :   autocmd!
@@ -62,31 +64,40 @@ set cmdheight=2
 set laststatus=2
 set wrap
 set linebreak
-
-colorscheme onedark
-"set background=dark
+colorscheme PaperColor
+set background=dark
 
 " Javascript related stuff
-" run eslint prettier each time we save JS files
-autocmd BufWritePost *.js AsyncRun -post=checktime ./node_modules/.bin/eslint --fix %
 
 " turn on vim-javascript flow support
 let g:javascript_plugin_flow = 1
-" turn on vim-jsx support for .js files
+" turn on vim-jsx support for .js files or else it only works for .jsx
 let g:jsx_ext_required = 0
+
+let g:ale_sign_error = '●'
+let g:ale_sign_warning = '.'
+let g:ale_lint_on_save = 1
 
 function! FormatJSON()
     :%!python -m json.tool
 endfunction
 
-" Change cursor line darker on insert
-autocmd InsertEnter * hi CursorLine cterm=NONE ctermbg=28
-autocmd InsertLeave * hi CursorLine cterm=NONE ctermbg=black
-
 " Enable fzf within vim
 nnoremap <leader>p :History<CR>
 nnoremap <leader>b :Buffers<CR>
 nnoremap <leader>t :Files<CR>
+"don't include files specified in gitignore, hgignore, svnignore
+let $FZF_DEFAULT_COMMAND = 'fd --type f'
 
 " save some keystrokes with this remap
 nnoremap ; :
+" move between buffers using Fn key
+nnoremap <F1> :bp<cr>
+nnoremap <F2> :bn<cr>
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#show_tabs = 0
+let g:airline#extensions#tabline#show_splits = 1
+
+
+
