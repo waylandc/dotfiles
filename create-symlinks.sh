@@ -33,3 +33,13 @@ if [ -f "$HOME/.tmux.conf" ]; then
 else
   ln -sf $PWD/.tmux/slim.tmux.conf $HOME/.tmux.conf
 fi
+
+if [ -d "$HOME/.tmux" ]; then
+  if [ -L "$HOME/.tmux" ]; then
+    ln -sf $PWD/.tmux $HOME/.tmux
+  else
+    echo "ERROR: $HOME/.tmux is a dir, NOT a symlink. Check or remove before retrying\n"
+  fi
+else
+  ln -sf $PWD/.tmux $HOME/.tmux
+fi

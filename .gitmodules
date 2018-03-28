@@ -1,0 +1,9 @@
+[submodule ".vim/plugged/YouCompleteMe"]
+	path = .vim/plugged/YouCompleteMe
+	url = https://github.com/Valloric/YouCompleteMe.git
+[submodule ".vim/plugged/vim-airline-themes"]
+	path = .vim/plugged/vim-airline-themes
+	url = https://github.com/vim-airline/vim-airline-themes.git
+[submodule ".vim/plugged/tern_for_vim"]
+	path = .vim/plugged/tern_for_vim
+	url = https://github.com/ternjs/tern_for_vim.git
