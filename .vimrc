@@ -27,6 +27,8 @@ call plug#begin()
     Plug 'junegunn/fzf.vim'
     Plug 'marijnh/tern_for_vim'
     Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
+    Plug 'shougo/unite.vim'
+    Plug 'shougo/vimfiler'
 call plug#end()
 
 filetype plugin indent on
@@ -136,4 +138,34 @@ let g:airline_theme='angr'
 "set completeopt-=preview
 let g:ycm_add_preview_to_completeopt = 0
 
+" VimFiler config
+let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_safe_mode_by_default = 0
+let g:vimfiler_tree_leaf_icon = " "
+let g:vimfiler_tree_opened_icon = '▾'
+let g:vimfiler_tree_closed_icon = '▸'
+let g:vimfiler_file_icon = '-'
+let g:vimfiler_marked_file_icon = '✓'
+let g:vimfiler_readonly_file_icon = '✗'
+let g:vimfiler_time_format = '%m-%d-%y %H:%M:%S'
+let g:vimfiler_expand_jump_to_first_child = 0
+let g:vimfiler_ignore_pattern = '\.git\|\.DS_Store\|\.pyc|node_modules'
+
+call vimfiler#custom#profile('default', 'context', {
+  \ 'explorer' : 1,
+  \ 'winwidth' : 40,
+  \ 'winminwidth' : 40,
+  \ 'toggle' : 1,
+  \ 'columns' : 'type',
+  \ 'auto_expand' : 1,
+  \ 'parent' : 0,
+  \ 'explorer_columns' : 'type',
+  \ 'status' : 1,
+  \ 'safe' : 0,
+  \ 'hidden' : 1,
+  \ 'no_quit': 1,
+  \ 'force_hide' : 0,
+  \ })
+
+nnoremap <F4> :VimFilerSplit -toggle<cr>
 
