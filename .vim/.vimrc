@@ -1,1 +1,0 @@
-/Users/wchan/work/dotfiles/.vimrc

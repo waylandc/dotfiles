@@ -13,7 +13,7 @@ call plug#begin()
     Plug 'pangloss/vim-javascript'
     Plug 'jelera/vim-javascript-syntax'
     Plug 'mxw/vim-jsx'
-"    Plug 'w0rp/ale' " Async Lint Engine
+    Plug 'w0rp/ale' " Async Lint Engine
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
     Plug 'skywind3000/asyncrun.vim'
