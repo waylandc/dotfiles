@@ -11,7 +11,7 @@ augroup END
 call plug#begin()
 Plug 'flazz/vim-colorschemes'
 Plug 'nightsense/stellarized'
-Plug 'nightsense/nemo'
+" Plug 'nightsense/nemo'
 Plug 'sheerun/vim-polyglot'
 Plug 'pangloss/vim-javascript'
 Plug 'posva/vim-vue'
@@ -20,12 +20,13 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'morhetz/gruvbox'
 Plug 'elzr/vim-json' "json highlighting
-Plug 'tpope/vim-fugitive' "git commands
+" Plug 'tpope/vim-fugitive' "git commands
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'fatih/vim-go'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'ryanoasis/vim-devicons'
+Plug 'Valloric/YouCompleteMe'
 call plug#end()
 
 filetype plugin indent on
@@ -55,14 +56,14 @@ set ruler                   " Show cursor posn at right side of status line
 set number relativenumber   " Line numbers on
 set autoread                " if file changed since opening, auto read it
 set bs=2                    " Backspace over everything in insert mode
-set history=500             " Number of things to remember in history
+set history=100             " Number of things to remember in history
 set showmatch               " Show matching brackets
 set showcmd                 " Display incomplete commands
 set wrap
 set linebreak
 set rtp+=~/.fzf
 
-colorscheme wombat256 
+colorscheme stellarized
 
 if exists('+colorcolumn')
   " vim 7.3+ supports colorcolumn
@@ -98,6 +99,10 @@ endfunction
 nnoremap <leader>p :History<CR>
 nnoremap <leader>b :Buffers<CR>
 nnoremap <leader>t :Files<CR>
+
+" move between buffers using Fn key
+nnoremap <F1> :bp<cr>
+nnoremap <F2> :bn<cr>
 
 let g:ale_linters = {'javascript': ['eslint']}
 "let g:ale_linters = {'javascript': ['prettier', 'eslint']}
