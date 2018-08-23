@@ -10,7 +10,7 @@ augroup END
 " We use Vundle for our plugins
 call plug#begin()
 Plug 'flazz/vim-colorschemes'
-Plug 'nightsense/stellarized'
+" Plug 'nightsense/stellarized'
 " Plug 'nightsense/nemo'
 Plug 'sheerun/vim-polyglot'
 Plug 'pangloss/vim-javascript'
@@ -26,7 +26,7 @@ Plug 'fatih/vim-go'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'ryanoasis/vim-devicons'
-Plug 'Valloric/YouCompleteMe'
+"Plug 'Valloric/YouCompleteMe'
 call plug#end()
 
 filetype plugin indent on
@@ -63,7 +63,7 @@ set wrap
 set linebreak
 set rtp+=~/.fzf
 
-colorscheme stellarized
+colorscheme molokai
 
 if exists('+colorcolumn')
   " vim 7.3+ supports colorcolumn
