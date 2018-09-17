@@ -9,11 +9,14 @@ augroup END
 
 " We use Vundle for our plugins
 call plug#begin()
+Plug 'scrooloose/nerdtree'
+Plug 'ryanoasis/vim-devicons'
+Plug 'chriskempson/tomorrow-theme'
 Plug 'flazz/vim-colorschemes'
 Plug 'nightsense/stellarized'
-" Plug 'nightsense/nemo'
 Plug 'sheerun/vim-polyglot'
 Plug 'pangloss/vim-javascript'
+Plug 'vim-syntastic/syntastic'
 Plug 'posva/vim-vue'
 Plug 'w0rp/ale' " Async Lint Engine
 Plug 'vim-airline/vim-airline'
@@ -28,6 +31,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'Valloric/YouCompleteMe'
 call plug#end()
+
+colorscheme Tomorrow-Night-Bright
 
 filetype plugin indent on
 
@@ -62,8 +67,6 @@ set showcmd                 " Display incomplete commands
 set wrap
 set linebreak
 set rtp+=~/.fzf
-
-colorscheme stellarized
 
 if exists('+colorcolumn')
   " vim 7.3+ supports colorcolumn
@@ -128,4 +131,42 @@ let g:airline#extensions#tabline#show_tabs = 0
 let g:airline#extensions#tabline#show_splits = 1
 let g:airline_theme='angr'
 let g:airline#extensions#ale#enabled = 1
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+"------------------------------------------------------------------------------
+" Syntastic
+"------------------------------------------------------------------------------
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+"------------------------------------------------------------------------------
+" NERDTree
+"------------------------------------------------------------------------------
+
+" General properties
+let NERDTreeDirArrows=1
+let NERDTreeMinimalUI=1
+let NERDTreeIgnore=['\.o$', '\.pyc$', '\.php\~$']
+let NERDTreeWinSize = 35
+
+" Make sure that when NT root is changed, Vim's pwd is also updated
+let NERDTreeChDirMode = 2
+let NERDTreeShowLineNumbers = 1
+let NERDTreeAutoCenter = 1
+
+nmap <C-l> :call NERDComment('n','toggle')<cr>
+vmap <C-l> :call NERDComment('v','toggle')<cr>
+" Open NERDTree on startup, when no file has been specified
+"autocmd VimEnter * if !argc() | NERDTree | endif
+
+" Locate file in hierarchy quickly
+map <leader>T :NERDTreeFind<cr>
+
+" Toogle on/off
+nmap <leader>o :NERDTreeToggle<cr>
 
