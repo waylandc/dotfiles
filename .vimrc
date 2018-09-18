@@ -165,7 +165,8 @@ vmap <C-l> :call NERDComment('v','toggle')<cr>
 "autocmd VimEnter * if !argc() | NERDTree | endif
 
 " Locate file in hierarchy quickly
-map <leader>T :NERDTreeFind<cr>
+"WC conflicts with fzf bind
+"map <leader>T :NERDTreeFind<cr>
 
 " Toogle on/off
 nmap <leader>o :NERDTreeToggle<cr>
