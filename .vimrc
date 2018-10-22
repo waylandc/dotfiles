@@ -15,6 +15,7 @@ Plug 'chriskempson/tomorrow-theme'
 Plug 'flazz/vim-colorschemes'
 " Plug 'nightsense/stellarized'
 " Plug 'nightsense/nemo'
+Plug 'nightsense/snow'
 Plug 'nightsense/stellarized'
 Plug 'sheerun/vim-polyglot'
 Plug 'pangloss/vim-javascript'
@@ -34,7 +35,8 @@ Plug 'ryanoasis/vim-devicons'
 "Plug 'Valloric/YouCompleteMe'
 call plug#end()
 
-colorscheme Tomorrow-Night-Bright
+set background=dark
+colorscheme snow 
 
 filetype plugin indent on
 
@@ -161,8 +163,8 @@ let NERDTreeChDirMode = 2
 let NERDTreeShowLineNumbers = 1
 let NERDTreeAutoCenter = 1
 
-nmap <C-l> :call NERDComment('n','toggle')<cr>
-vmap <C-l> :call NERDComment('v','toggle')<cr>
+"nmap <C-l> :call NERDComment('n','toggle')<cr>
+"vmap <C-l> :call NERDComment('v','toggle')<cr>
 " Open NERDTree on startup, when no file has been specified
 "autocmd VimEnter * if !argc() | NERDTree | endif
 
