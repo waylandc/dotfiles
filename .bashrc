@@ -22,10 +22,9 @@ shopt -s checkwinsize
 
 [ -r "/etc/bashrc_$TERM_PROGRAM" ] && . "/etc/bashrc_$TERM_PROGRAM"
 
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-# Nix
-#if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
-#  . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-#fi
-# End Nix
-
+if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+  # nix environment variables
+  . /Users/waylandchan/.nix-profile/etc/profile.d/nix.sh
+fi

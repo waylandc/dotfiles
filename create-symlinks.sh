@@ -2,6 +2,17 @@
 # This will create symlinks for our dotfiles
 # Must be run in the directory of our dotfiles repo
 
+#bash
+if [ -f "$HOME/.bashrc" ]; then
+  if [ -L "$HOME/.bashrc" ]; then
+    ln -sf $PWD/.bashrc $HOME/.bashrc
+  else
+    echo "ERROR: $HOME/.bashrc is a file, NOT a symlink. Check or remove before retrying\n"
+  fi
+else
+  ln -sf $PWD/.bashrc $HOME/.bashrc
+fi
+
 #vim
 if [ -d "$HOME/.vim" ]; then
   if [ -L "$HOME/.vim" ]; then
@@ -23,7 +34,7 @@ else
   ln -sf $PWD/.vimrc $HOME/.vimrc
 fi
 
-
+#tmux
 if [ -f "$HOME/.tmux.conf" ]; then
   if [ -L "$HOME/.tmux.conf" ]; then
     ln -sf $PWD/.tmux/slim.tmux.conf $HOME/.tmux.conf
