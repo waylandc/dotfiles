@@ -3,6 +3,16 @@
 # Must be run in the directory of our dotfiles repo
 
 #bash
+if [ -f "$HOME/.bash_profile" ]; then
+  if [ -L "$HOME/.bash_profile" ]; then
+    ln -sf $PWD/.bash_profile $HOME/.bash_profile
+  else
+    echo "ERROR: $HOME/.bash_profile is a file, NOT a symlink. Check or remove before retrying\n"
+  fi
+else
+  ln -sf $PWD/.bash_profile $HOME/.bash_profile
+fi
+
 if [ -f "$HOME/.bashrc" ]; then
   if [ -L "$HOME/.bashrc" ]; then
     ln -sf $PWD/.bashrc $HOME/.bashrc
