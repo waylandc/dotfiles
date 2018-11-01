@@ -15,6 +15,15 @@ if [ -z "$PS1" ]; then
    return
 fi
 
+# powerline
+function _update_ps1() {
+  PS1=$(powerline-shell $?)
+}
+
+if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then
+  PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+fi
+
 # PS1='\h:\W \u\$ '
 PS1='\e[33;1m\u@\h: \e[31m\W\e[0m\$ '
 # Make bash check its window size after a process completes

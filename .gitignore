@@ -1,2 +1,5 @@
 .vim/.netrwhist
 **/plugged
+.vim/.vim
+.tmux/.tmux
+

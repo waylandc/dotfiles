@@ -56,11 +56,14 @@ else
 fi
 
 if [ -d "$HOME/.tmux" ]; then
+  echo "home/.tmux dir exists\n"
   if [ -L "$HOME/.tmux" ]; then
+    echo "about to create symlink from $PWD in $HOME\n"
     ln -sf $PWD/.tmux $HOME/.tmux
   else
     echo "ERROR: $HOME/.tmux is a dir, NOT a symlink. Check or remove before retrying\n"
   fi
 else
+  echo "no home/.tmux dir\n"
   ln -sf $PWD/.tmux $HOME/.tmux
 fi

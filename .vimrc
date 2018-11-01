@@ -10,7 +10,6 @@ augroup END
 " We use Vundle for our plugins
 call plug#begin()
 Plug 'scrooloose/nerdtree'
-Plug 'ryanoasis/vim-devicons'
 Plug 'chriskempson/tomorrow-theme'
 Plug 'flazz/vim-colorschemes'
 " Plug 'nightsense/stellarized'
@@ -31,10 +30,11 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'fatih/vim-go'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'ryanoasis/vim-devicons'
 "Plug 'Valloric/YouCompleteMe'
 call plug#end()
 
+" Theme and styling
+set t_Co=256
 set background=dark
 colorscheme snow 
 
@@ -43,7 +43,7 @@ filetype plugin indent on
 set nocompatible            " Must come first because it changes other options
 let mapleader=","           " remap our leader from \ to ,
 set hidden                  " hides buffers even if they have unsaved changes
-"set cursorline              " highlight line containing cursor
+set cursorline              " highlight line containing cursor
 set visualbell              " don't beep
 set noerrorbells            " don't beep
 set incsearch               " Highlight matches as you type
@@ -77,10 +77,10 @@ if exists('+colorcolumn')
   set colorcolumn=80
 endif
 
-if has('gui_running')
-  set guifont=DroidSansMono_NF:h11:cANSI:qDRAFT
-  set lines=80 columns=125
-endif
+" if has('gui_running')
+"   set guifont=DroidSansMono_NF:h11:cANSI:qDRAFT
+"   set lines=80 columns=125
+" endif
 
 " only use relativenumber on window with focus
 augroup numbertoggle
@@ -135,6 +135,7 @@ let g:airline#extensions#tabline#show_tabs = 0
 let g:airline#extensions#tabline#show_splits = 1
 let g:airline_theme='angr'
 let g:airline#extensions#ale#enabled = 1
+let g:airline_powerline_fonts=1
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -166,7 +167,7 @@ let NERDTreeAutoCenter = 1
 "nmap <C-l> :call NERDComment('n','toggle')<cr>
 "vmap <C-l> :call NERDComment('v','toggle')<cr>
 " Open NERDTree on startup, when no file has been specified
-"autocmd VimEnter * if !argc() | NERDTree | endif
+autocmd VimEnter * if !argc() | NERDTree | endif
 
 " Locate file in hierarchy quickly
 "WC conflicts with fzf bind
