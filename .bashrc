@@ -1,11 +1,17 @@
 
 export TERM="xterm-256color"
 
+export PATH="$HOME/Downloads/parity-binaries:$HOME/work/protoc-3.6.1-osx-x86_64/bin:$HOME/go/bin:$PATH"
+
 if ls --help 2>&1 | grep -q -- --color
 then
     alias ls='ls --color=auto -F'
+    alias la='ls -la --color=auto -F'
+    alias ll='ls -l --color=auto -F'
 else
     alias ls='ls -FG'
+    alias ll='ls -lFG'
+    alias la='ls -laFG'
 fi
 
 export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
@@ -14,6 +20,9 @@ export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
 if [ -z "$PS1" ]; then
    return
 fi
+
+# Wayland's aliases
+alias proto='protoc --go_out=. *.proto'
 
 # powerline
 function _update_ps1() {
@@ -25,7 +34,8 @@ if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then
 fi
 
 # PS1='\h:\W \u\$ '
-PS1='\e[33;1m\u@\h: \e[31m\W\e[0m\$ '
+PS1='\t:\w\\$\[$(tput sgr0)\]'
+#PS1='\e[33;1m\u@\h: \e[31m\W\e[0m\$ '
 # Make bash check its window size after a process completes
 shopt -s checkwinsize
 
@@ -58,4 +68,6 @@ gpip3(){
 }
 
 # end python setup
+
+eval "$(direnv hook bash)"
 

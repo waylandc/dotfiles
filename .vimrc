@@ -158,7 +158,8 @@ let NERDTreeDirArrows=1
 let NERDTreeMinimalUI=1
 let NERDTreeIgnore=['\.o$', '\.pyc$', '\.php\~$']
 let NERDTreeWinSize = 35
-
+" close tree after opening a file
+let NERDTreeQuitOnOpen=1
 " Make sure that when NT root is changed, Vim's pwd is also updated
 let NERDTreeChDirMode = 2
 let NERDTreeShowLineNumbers = 1
@@ -175,4 +176,7 @@ autocmd VimEnter * if !argc() | NERDTree | endif
 
 " Toogle on/off
 nmap <leader>o :NERDTreeToggle<cr>
+
+" after C+V visual selection of something, C+R to do a global search/replace
+vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 
