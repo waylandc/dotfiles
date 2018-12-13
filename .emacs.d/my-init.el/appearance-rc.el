@@ -1,4 +1,7 @@
 
+(set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8-unix)
+
 ;; skip the splash screen and goto scratch buffer immediately
 (setq inhibit-splash-screen t
       initial-scratch-message nil
