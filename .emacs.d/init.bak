@@ -1,0 +1,158 @@
+;; package.el
+(require 'package)
+(require 'cl)
+(add-to-list 'package-archives
+	     '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives
+	     '("marmalade" . "http://marmalade-repo.org/packages/") t)
+(package-initialize)
+
+;; define our default list of must-have packages
+(defvar wchan/packages '(autopair
+			 magit
+			 go-mode go-eldoc
+			 gotest
+			 company
+			 company-go
+			 go-autocomplete
+			 protobuf-mode
+			 js2-mode
+			 json-mode
+			 flycheck
+			 web-mode
+			 powerline
+			 doom-themes
+			 kaolin-themes
+			 all-the-icons
+			 org)
+  "Default packages")
+
+;; when emacs boots, make sure all pkgs are installed. If not, goto ELPA
+(defun wchan/packages-installed-p ()
+  (loop for pkg in wchan/packages
+	when (not (package-installed-p pkg)) do (return nil)
+	finally (return t)))
+(unless (wchan/packages-installed-p)
+  (message "%s" "Refreshing package database...")
+  (package-refresh-contents)
+  (dolist (pkg wchan/packages)
+    (when (not (package-installed-p pkg))
+      (package-install pkg))))
+
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("d2e9c7e31e574bf38f4b0fb927aaff20c1e5f92f72001102758005e53d77b8c9" default)))
+ '(package-selected-packages
+   (quote
+    (material-theme doom-themes web-mode powerline magit gotest flycheck company-go autopair))))
+
+;; configure auto-complete
+;; (ac-config-default)
+
+;;==================== General setup================================
+;; skip the splash screen and goto scratch buffer immediately
+(setq inhibit-splash-screen t
+      initial-scratch-message nil
+      initial-major-mode 'org-mode)
+
+;; turn off scroll bars, menu and tool bars
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(display-time-mode 1)
+
+(set-frame-font "Source Code Pro-11")
+
+(global-display-line-numbers-mode)
+
+;; turn off annoying backup files
+(setq make-backup-files nil)
+
+;; abbreviate yes/no in prompts
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+;; close braces as soon as you open them
+(require 'autopair)
+(autopair-global-mode) ;; enable autopair in all buffers
+
+(setq default-tab-width 2)
+
+;;(require 'powerline)
+;;(powerline-default-theme)
+(require 'doom-themes)
+(load-theme 'doom-city-lights t)
+;;(require 'kaolin-themes)
+;;(load-theme 'kaolin-dark t)
+
+;; set default window size and location
+(if (display-graphic-p)
+    (progn
+      (setq initial-frame-alist
+            '(
+              (tool-bar-lines . 0)
+              (width . 128) ; chars
+              (height . 80) ; lines
+              (left . 2320)
+              (top . 0)))
+      (setq default-frame-alist
+            '(
+              (tool-bar-lines . 0)
+              (width . 106)
+              (height . 60)
+              (left . 50)
+              (top . 50))))
+  (progn
+    (setq initial-frame-alist '( (tool-bar-lines . 0)))
+    (setq default-frame-alist '( (tool-bar-lines . 0)))))
+
+
+;; Golang configuration
+
+(defun go-mode-setup ()
+  (setq tab-width 2 indent-tabs-mode 1)
+  (add-hook 'before-save-hook 'gofmt-before-save) ; gofmt before every save
+  (setq gofmt-command "goimports")  ; gofmt uses goimports
+  (if (not (string-match "go" compile-command)) ; set compile command
+      (set (make-local-variable 'compile-command)
+	   "go build -v && go test -v && go vet"))
+
+  (local-set-key (kbd "M-.") 'godef-jump) ; Go to definition
+  (local-set-key (kbd "M-*") 'pop-tag-mark) ; Return from whence you came
+  (local-set-key (kbd "M-p") 'compile) ; Invoke compiler
+  (local-set-key (kdb "M-]") 'next-error) ; Go to next error (or message)
+  (local-set-key (kdb "M-[") 'previous-error)) ; Go to previous error (or message)
+
+ ;; (auto-complete-mode 1)) ; Enable auto-complete mode
+(add-hook 'go-mode-hook 'go-mode-setup)
+
+(require 'company)
+(require 'go-mode)
+(require 'company-go)
+(setq company-tooltip-limit 20)
+(setq company-idle-delay .3)
+
+(add-hook 'go-mode-hook (lambda ()
+			  (set (make-local-variable 'company-backends) '(company-go))
+			  (company-mode)))
+
+
+;;(with-eval-after-load 'go-mode
+;;  (require 'go-autocomplete))
+
+;; end golang configuration
+
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+;;; init.el ends here
