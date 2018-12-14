@@ -42,6 +42,7 @@ shopt -s checkwinsize
 [ -r "/etc/bashrc_$TERM_PROGRAM" ] && . "/etc/bashrc_$TERM_PROGRAM"
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+export FZF_DEFAULT_COMMAND='fd --type f'
 
 if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
   # nix environment variables

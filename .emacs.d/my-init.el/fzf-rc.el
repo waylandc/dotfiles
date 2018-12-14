@@ -1,0 +1,2 @@
+(rc/require 'fzf)
+

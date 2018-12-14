@@ -8,6 +8,7 @@
       initial-major-mode 'org-mode)
 
 ;; turn off scroll bars, menu and tool bars
+(desktop-save-mode 1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -15,13 +16,18 @@
 (global-display-line-numbers-mode)
 (setq default-tab-width 2)
 
+;; Highlight current line
+(global-hl-line-mode 1)
+
 ;; Theme
-;;(require 'powerline)
-;;(powerline-default-theme)
-(require 'doom-themes)
-(load-theme 'doom-city-lights t)
+(rc/require 'powerline)
+(powerline-default-theme)
+;;(rc/require 'doom-themes)
+;;(load-theme 'doom-city-lights t)
 ;;(require 'kaolin-themes)
 ;;(load-theme 'kaolin-dark t)
+(rc/require 'subatomic256-theme)
+(load-theme 'subatomic256 t)
 
 
 ;; Setup font
@@ -29,7 +35,9 @@
 
 (cond
    ((eq system-type 'windows-nt) (set-frame-font "Source Code Pro-12"))
-((eq system-type 'gnu/linux) (set-frame-font "Consolas-13")))
+   ((eq system-type 'gnu/linux) (set-frame-font "Consolas-13"))
+   ((eq system-type 'darwin) (set-frame-font "Roboto Mono for Powerline-14"))
+)
 
 ;;(set-frame-font "Source Code Pro-11")
 ;; windows "Consolas-13"

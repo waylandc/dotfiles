@@ -17,8 +17,8 @@
   (local-set-key (kbd "M-.") 'godef-jump) ; Go to definition
   (local-set-key (kbd "M-*") 'pop-tag-mark) ; Return from whence you came
   (local-set-key (kbd "M-p") 'compile) ; Invoke compiler
-  (local-set-key (kdb "M-]") 'next-error) ; Go to next error (or message)
-  (local-set-key (kdb "M-[") 'previous-error)) ; Go to previous error (or message)
+  (local-set-key (kbd "M-]") 'next-error) ; Go to next error (or message)
+  (local-set-key (kbd "M-[") 'previous-error)) ; Go to previous error (or message)
 
  ;; (auto-complete-mode 1)) ; Enable auto-complete mode
 (add-hook 'go-mode-hook 'go-mode-setup)
