@@ -5,7 +5,6 @@
 (rc/require 'go-autocomplete)
 (rc/require 'go-eldoc)
 (rc/require 'company-go)
-(rc/require 'protobuf-mode)
 
 (defun go-mode-setup ()
   (setq tab-width 4)
