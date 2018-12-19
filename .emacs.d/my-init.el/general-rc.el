@@ -20,3 +20,11 @@
 ;; configure auto-complete
 ;; (ac-config-default)
 
+;; by default tabs are already used for indentation but just set here for clarity
+;; note - setq-default sets  values only in buffers that do not have their own
+;; local value of the variable
+(setq-default indent-tabs-mode t)
+;; make our default tab width 4.
+(setq-default tab-width 4)
+;; to override tab width in a mode hook use (setq tab-width 2)
+

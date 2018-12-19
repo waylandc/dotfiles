@@ -14,34 +14,26 @@
 (menu-bar-mode -1)
 (display-time-mode 1)
 (global-display-line-numbers-mode)
-(setq default-tab-width 2)
-
 ;; Highlight current line
 (global-hl-line-mode 1)
 
 ;; Theme
 (rc/require 'powerline)
 (powerline-default-theme)
-;;(rc/require 'doom-themes)
-;;(load-theme 'doom-city-lights t)
-;;(require 'kaolin-themes)
-;;(load-theme 'kaolin-dark t)
 (rc/require 'subatomic256-theme)
 (load-theme 'subatomic256 t)
 
 
 ;; Setup font
-
-
 (cond
    ((eq system-type 'windows-nt) (set-frame-font "Source Code Pro-12"))
+;; ((eq system-type 'windows-nt) (add-to-list 'default-frame-alist
+;;		    '(font . "-outline-Source Code Pro-normal-normal-normal-mono-20-*-*-*-c-*-iso8859-1")))
+;;						   "Source Code Pro-12")))
    ((eq system-type 'gnu/linux) (set-frame-font "Consolas-13"))
    ((eq system-type 'darwin) (set-frame-font "Roboto Mono for Powerline-14"))
 )
 
-;;(set-frame-font "Source Code Pro-11")
-;; windows "Consolas-13"
-;; gnu/linux "Ubuntu Mono-18"
 
 ;;(defun rc/get-default-font ()
 ;;  (cond
@@ -53,7 +45,8 @@
 ;;(when (display-graphic-p)
 ;;  (set-face-attribute 'fixed-pitch nil :family (rc/get-default-font)))
 
-;; Set default window size and location
+
+;; Set default window size and location 
 (if (display-graphic-p)
     (progn
       (setq initial-frame-alist
