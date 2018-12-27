@@ -21,7 +21,7 @@
        (load "C:/Users/Wayland/.emacs.d/my-init.el/general-rc.el")
        (load "C:/Users/Wayland/.emacs.d/my-init.el/appearance-rc.el")
        (load "C:/Users/Wayland/.emacs.d/my-init.el/company-rc.el")
-       (load "C:/Users/Wayland/.emacs.d/my-init.el/protobuf-mode.el")
+       (load "C:/Users/Wayland/.emacs.d/my-init.el/protobuf-rc.el")
        (load "C:/Users/Wayland/.emacs.d/my-init.el/golang-rc.el")
        (load "C:/Users/Wayland/.emacs.d/my-init.el/magit-rc.el")
        (load "C:/Users/Wayland/.emacs.d/my-init.el/js2-mode-rc.el")
@@ -34,7 +34,7 @@
        (load "~/.emacs.d/my-init.el/appearance-rc.el")
        (load "~/.emacs.d/my-init.el/company-rc.el")
        (load "~/.emacs.d/my-init.el/golang-rc.el")
-       (load "~/.emacs.d/my-init.el/protobuf-mode.el")
+      (load "~/.emacs.d/my-init.el/protobuf-rc.el")
        (load "~/.emacs.d/my-init.el/magit-rc.el")
        (load "~/.emacs.d/my-init.el/js2-mode-rc.el")
        (load "~/.emacs.d/my-init.el/web-mode-rc.el")
@@ -51,7 +51,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (auto-complete-config subatomic256-theme typescript-mode dash-functional web-mode shrink-path protobuf-mode powerline magit json-mode js2-mode gotest go-eldoc go-autocomplete flycheck eldoc-eval company-go autopair))))
+	(auto-complete-config subatomic256-theme typescript-mode dash-functional web-mode shrink-path protobuf-mode powerline magit json-mode js2-mode gotest go-eldoc go-autocomplete flycheck eldoc-eval company-go autopair))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
