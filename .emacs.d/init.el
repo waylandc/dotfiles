@@ -4,7 +4,11 @@
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives
+		'("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives
 	     '("marmalade" . "https://marmalade-repo.org/packages/") t)
+
+(package-refresh-contents)
 (package-initialize)
 
 (setq my-init-dir
@@ -21,7 +25,7 @@
        (load "C:/Users/Wayland/.emacs.d/my-init.el/golang-rc.el")
        (load "C:/Users/Wayland/.emacs.d/my-init.el/magit-rc.el")
        (load "C:/Users/Wayland/.emacs.d/my-init.el/js2-mode-rc.el")
-       (load "C:/Users/Wayland/.emacs.d/my-init.el/typescript-rc.el")
+       ;;(load "C:/Users/Wayland/.emacs.d/my-init.el/typescript-rc.el")
        )
     ((eq system-type 'darwin)
        (load "~/.emacs.d/my-init.el/rc.el")

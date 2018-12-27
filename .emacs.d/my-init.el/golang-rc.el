@@ -2,7 +2,6 @@
 
 (rc/require 'go-mode)
 (rc/require 'gotest)
-(rc/require 'go-autocomplete)
 (rc/require 'go-eldoc)
 (rc/require 'company-go)
 (rc/require 'protobuf-mode)
@@ -22,15 +21,10 @@
   (local-set-key (kbd "M-]") 'next-error) ; Go to next error (or message)
   (local-set-key (kbd "M-[") 'previous-error)) ; Go to previous error (or message)
 
- ;; (auto-complete-mode 1)) ; Enable auto-complete mode
 (add-hook 'go-mode-hook 'go-mode-setup)
 
 (add-hook 'go-mode-hook (lambda ()
 			  (set (make-local-variable 'company-backends) '(company-go))
 			  (company-mode)))
-
-
-;;(with-eval-after-load 'go-mode
-;;  (require 'go-autocomplete))
 
 ;; end golang configuration

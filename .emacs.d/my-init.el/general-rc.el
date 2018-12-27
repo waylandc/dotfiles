@@ -17,9 +17,6 @@
 (rc/require 'autopair)
 (autopair-global-mode) ;; enable autopair in all buffers
 
-;; configure auto-complete
-;; (ac-config-default)
-
 ;; by default tabs are already used for indentation but just set here for clarity
 ;; note - setq-default sets  values only in buffers that do not have their own
 ;; local value of the variable
