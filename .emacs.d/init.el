@@ -1,47 +1,29 @@
 ;; package.el
 (require 'package)
 (require 'cl)
-(add-to-list 'package-archives
-	     '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(add-to-list 'package-archives
-		'("melpa-stable" . "https://stable.melpa.org/packages/") t)
-(add-to-list 'package-archives
-	     '("marmalade" . "https://marmalade-repo.org/packages/") t)
-
-(package-refresh-contents)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+;; (package-refresh-contents)
 (package-initialize)
 
-(setq my-init-dir
-    (file-name-directory
-        (or load-file-name (buffer-file-name))))
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
-(cond ((eq system-type 'windows-nt)
-       (load "C:/Users/Wayland/.emacs.d/my-init.el/rc.el")
+(eval-when-compile
+  (require 'use-package))
+(setq use-package-always-ensure t)
 
-       (load "C:/Users/Wayland/.emacs.d/my-init.el/general-rc.el")
-       (load "C:/Users/Wayland/.emacs.d/my-init.el/appearance-rc.el")
-       (load "C:/Users/Wayland/.emacs.d/my-init.el/company-rc.el")
-       (load "C:/Users/Wayland/.emacs.d/my-init.el/protobuf-rc.el")
-       (load "C:/Users/Wayland/.emacs.d/my-init.el/golang-rc.el")
-       (load "C:/Users/Wayland/.emacs.d/my-init.el/magit-rc.el")
-       (load "C:/Users/Wayland/.emacs.d/my-init.el/js2-mode-rc.el")
-       ;;(load "C:/Users/Wayland/.emacs.d/my-init.el/typescript-rc.el")
-       )
-    ((eq system-type 'darwin)
-       (load "~/.emacs.d/my-init.el/rc.el")
-
-       (load "~/.emacs.d/my-init.el/general-rc.el")
-       (load "~/.emacs.d/my-init.el/appearance-rc.el")
-       (load "~/.emacs.d/my-init.el/company-rc.el")
-       (load "~/.emacs.d/my-init.el/golang-rc.el")
-      (load "~/.emacs.d/my-init.el/protobuf-rc.el")
-       (load "~/.emacs.d/my-init.el/magit-rc.el")
-       (load "~/.emacs.d/my-init.el/js2-mode-rc.el")
-       (load "~/.emacs.d/my-init.el/web-mode-rc.el")
-       (load "~/.emacs.d/my-init.el/fzf-rc.el")
-       ;;(load "C:/Users/Wayland/.emacs.d/my-init.el/typescript-rc.el")
-       )
-)
+(load "C:/Users/Wayland/.emacs.d/my-init/general-rc.el")
+(load "C:/Users/Wayland/.emacs.d/my-init/appearance.el")
+(load "C:/Users/Wayland/.emacs.d/my-init/company-rc.el")
+(load "C:/Users/Wayland/.emacs.d/my-init/go.el")
+(load "C:/Users/Wayland/.emacs.d/my-init/magit-rc.el")
+(load "C:/Users/Wayland/.emacs.d/my-init/protobuf-rc.el")
+;;(load "C:/Users/Wayland/.emacs.d/my-init/vuejs-rc.el")
+;;(load "C:/Users/Wayland/.emacs.d/my-init/web-mode-rc.el")
+(load "C:/Users/Wayland/.emacs.d/my-init/js2-mode-rc.el")
 
 
 (custom-set-variables
@@ -51,7 +33,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-	(auto-complete-config subatomic256-theme typescript-mode dash-functional web-mode shrink-path protobuf-mode powerline magit json-mode js2-mode gotest go-eldoc go-autocomplete flycheck eldoc-eval company-go autopair))))
+	(auto-complete-config go-snippets go-guru company-go go-mode use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

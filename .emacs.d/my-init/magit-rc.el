@@ -1,7 +1,7 @@
 ;; magit requres this lib, but it is not installed automatically on
 ;; Windows.
-(rc/require 'cl-lib)
-(rc/require 'magit)
+(use-package cl-lib)
+(use-package magit)
 
 (setq magit-auto-revert-mode nil)
 

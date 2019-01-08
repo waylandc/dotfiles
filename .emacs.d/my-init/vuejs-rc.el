@@ -1,5 +1,5 @@
-(rc/require 'vue-mode)
-(rc/require 'vue-html-mode)
+(use-package vue-mode)
+(use-package vue-html-mode)
 
 (setq vue-mode-packages
       '(vue-mode))

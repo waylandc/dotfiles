@@ -1,4 +1,4 @@
-(rc/require 'web-mode)
+(use-package web-mode)
 
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
@@ -17,7 +17,7 @@
 
 (defun web-mode-hook ()
   "Hooks for web-mode."
-  (rc/require 'auto-complete-config)
+  (use-package auto-complete-config)
   (ac-config-default)
   (setq ac-auto-show-menu 2)
   (setq web-mode-markup-indent-offset 2)

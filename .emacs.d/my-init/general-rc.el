@@ -14,7 +14,7 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; close braces as soon as you open them
-(rc/require 'autopair)
+(use-package autopair :ensure t)
 (autopair-global-mode) ;; enable autopair in all buffers
 
 ;; by default tabs are already used for indentation but just set here for clarity

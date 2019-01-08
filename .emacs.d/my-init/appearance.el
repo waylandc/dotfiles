@@ -8,7 +8,7 @@
       initial-major-mode 'org-mode)
 
 ;; turn off scroll bars, menu and tool bars
-(desktop-save-mode 1)
+;; (desktop-save-mode 1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -17,34 +17,21 @@
 ;; Highlight current line
 (global-hl-line-mode 1)
 
-;; Theme
-(rc/require 'powerline)
+(use-package powerline :ensure t)
 (powerline-default-theme)
-(rc/require 'subatomic256-theme)
+(use-package subatomic256-theme :ensure t)
 (load-theme 'subatomic256 t)
 
-
 ;; Setup font
-(cond
-   ((eq system-type 'windows-nt) (set-frame-font "Source Code Pro-12"))
-;; ((eq system-type 'windows-nt) (add-to-list 'default-frame-alist
-;;		    '(font . "-outline-Source Code Pro-normal-normal-normal-mono-20-*-*-*-c-*-iso8859-1")))
-;;						   "Source Code Pro-12")))
-   ((eq system-type 'gnu/linux) (set-frame-font "Consolas-13"))
-   ((eq system-type 'darwin) (set-frame-font "Roboto Mono for Powerline-14"))
-)
+(when (equal system-type 'windows-nt)
+	(set-frame-font "Source Code Pro-12"))
+(when (equal system-type 'gnu-linux)
+	(set-frame-font "Consolas-13"))
+(when (equal system-type 'darwin)
+	(set-frame-font "Roboto Mono for Powerline-14"))
 
-
-;;(defun rc/get-default-font ()
-;;  (cond
-   ;((eq system-type 'windows-nt) "Consolas-12")
-;;((eq system-type 'gnu/linux) "Consolas-16")))
-
-;;(add-to-list 'default-frame-alist `(font . ,(rc/get-default-font)))
-
-;;(when (display-graphic-p)
-;;  (set-face-attribute 'fixed-pitch nil :family (rc/get-default-font)))
-
+(when (equal system-type 'windows-nt)
+  (set-face-attribute 'default nil :family "Consolas" :height 110))
 
 ;; Set default window size and location 
 (if (display-graphic-p)
@@ -66,3 +53,4 @@
   (progn
     (setq initial-frame-alist '( (tool-bar-lines . 0)))
     (setq default-frame-alist '( (tool-bar-lines . 0)))))
+

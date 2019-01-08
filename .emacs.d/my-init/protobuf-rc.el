@@ -1,4 +1,4 @@
-(rc/require 'protobuf-mode)
+(use-package protobuf-mode)
 
 (defconst my-protobuf-style
 	'((c-basic-offset . 4)
