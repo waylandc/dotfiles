@@ -10,6 +10,9 @@
 ;; disable auto save
 (setq auto-save-default nil)
 
+;; flash visual bell instead of beeping for an error
+(setq visible-bell t)
+
 ;; abbreviate yes/no in prompts
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -24,4 +27,7 @@
 ;; make our default tab width 4.
 (setq-default tab-width 4)
 ;; to override tab width in a mode hook use (setq tab-width 2)
+
+(use-package ivy)
+(ivy-mode 1)
 
