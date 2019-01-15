@@ -28,6 +28,10 @@
 (setq-default tab-width 4)
 ;; to override tab width in a mode hook use (setq tab-width 2)
 
+;; see matching pairs of parentheses with no delay
+(setq show-paren-delay 0)
+(show-paren-mode 1)
+
 (use-package ivy)
 (ivy-mode 1)
 

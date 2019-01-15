@@ -19,6 +19,7 @@
 
 (use-package powerline :ensure t)
 (powerline-default-theme)
+
 (use-package subatomic256-theme :ensure t)
 (load-theme 'subatomic256 t)
 
@@ -33,24 +34,61 @@
 (when (equal system-type 'windows-nt)
   (set-face-attribute 'default nil :family "Consolas" :height 110))
 
-;; Set default window size and location 
-(if (display-graphic-p)
+;; Set default window size and location
+(setq my-res-width (nth 3 (car (car (display-monitor-attributes-list)))))
+;; work 2560x1440
+(if (eq my-res-width 2560)
     (progn
       (setq initial-frame-alist
             '(
               (tool-bar-lines . 0)
-              (width . 128) ; chars
+              (width . 170) ; chars
               (height . 80) ; lines
-              (left . 2260)
+              (left . 1180)
               (top . 0)))
       (setq default-frame-alist
             '(
               (tool-bar-lines . 0)
-              (width . 106)
-              (height . 60)
-              (left . 50)
-              (top . 50))))
-  (progn
-    (setq initial-frame-alist '( (tool-bar-lines . 0)))
-    (setq default-frame-alist '( (tool-bar-lines . 0)))))
+              (width . 170)
+              (height . 80)
+              (left . 1180)
+              (top . 0))))
+ )
 
+;; rMBP More Space 1680x1050
+(if (eq my-res-width 1680)
+    (progn
+      (setq initial-frame-alist
+            '(
+              (tool-bar-lines . 0)
+              (width . 100) ; chars
+              (height . 60) ; lines
+              (left . 880)
+              (top . 0)))
+      (setq default-frame-alist
+            '(
+              (tool-bar-lines . 0)
+              (width . 100)
+              (height . 60)
+              (left . 880)
+              (top . 0))))
+)
+
+;; rMBP Default 1440x900
+(if (eq my-res-width 1440)
+    (progn
+      (setq initial-frame-alist
+            '(
+              (tool-bar-lines . 0)
+              (width . 100) ; chars
+              (height . 50) ; lines
+              (left . 630)
+              (top . 0)))
+      (setq default-frame-alist
+            '(
+              (tool-bar-lines . 0)
+              (width . 100)
+              (height . 50)
+              (left . 630)
+              (top . 0))))
+)
