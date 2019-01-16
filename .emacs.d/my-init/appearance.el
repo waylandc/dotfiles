@@ -91,4 +91,22 @@
               (height . 50)
               (left . 630)
               (top . 0))))
+  )
+;; home 
+(if (eq my-res-width 3840)
+    (progn
+      (setq initial-frame-alist
+            '(
+              (tool-bar-lines . 0)
+              (width . 190) ; chars
+              (height . 85) ; lines
+              (left . 1910)
+              (top . 0)))
+      (setq default-frame-alist
+            '(
+              (tool-bar-lines . 0)
+              (width . 190)
+              (height . 85)
+              (left . 1910)
+              (top . 0))))
 )
