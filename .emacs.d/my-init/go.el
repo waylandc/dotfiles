@@ -11,8 +11,10 @@
 
 (use-package go-mode)
 (use-package company-go)
-(use-package go-guru)
+(use-package go-guru :demand t)
 (use-package go-dlv)
+(use-package flymake-go :ensure t)
+
 
 (defun my-go-mode-hook() 
 	(use-package go-snippets :ensure t)
@@ -36,8 +38,19 @@
 	(local-set-key (kbd "M-P") 'recompile) 
 	(local-set-key (kbd "M-]") 'next-error) 
 	(local-set-key (kbd "M-[") 'previous-error)
-	;;(auto-complete-mode 1) 
+	;; (auto-complete-mode 1) 
 	;;(yas-minor-mode-on)
+
+	(eval-after-load 'go-mode'
+	  '(progn
+		 (flycheck-declare-checker go-gofmt
+								   "A Go syntax and style checker using the gofmt utility."
+								   :command '("gofmt" source-inplace)
+								   :error-patterns '(("^\\(?1:.*\\):\\(?2:[0-9]+\\):\\(?3:[0-9]+\\): \\(?4:.*\\)$" error))
+								   :modes 'go-mode)
+		 (add-to-list 'flycheck-checkers 'go-gofmt)))
+	(eval-after-load 'go-mode'
+	  '(require 'flymake-go))
 )
 
 (add-hook 'go-mode-hook (lambda ()
@@ -45,3 +58,4 @@
 	(company-mode)))
 
 (add-hook 'go-mode-hook 'my-go-mode-hook) 
+
