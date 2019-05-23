@@ -26,10 +26,10 @@
 (load (concat init-file-dir "/my-init/company-rc.el"))
 (load (concat init-file-dir "/my-init/go.el"))
 (load (concat init-file-dir "/my-init/magit-rc.el"))
-(load (concat init-file-dir "/my-init/protobuf-rc.el"))
-;;(load "C:/Users/Wayland/.emacs.d/my-init/vuejs-rc.el")
-;;(load "C:/Users/Wayland/.emacs.d/my-init/web-mode-rc.el")
-(load (concat init-file-dir "/my-init/js2-mode-rc.el"))
+(load (concat init-file-dir "/my-init/tidy-web-rc.el"))
+;; (load (concat init-file-dir "/my-init/web-mode-rc.el"))
+(load (concat init-file-dir "/my-init/vuejs-rc.el"))
+;;(load (concat init-file-dir "/my-init/js2-mode-rc.el"))
 
 
 (custom-set-variables
