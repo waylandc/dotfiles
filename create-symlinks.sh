@@ -44,6 +44,17 @@ else
   ln -sf $PWD/.vimrc $HOME/.vimrc
 fi
 
+#emacs
+if [ -d "$HOME/.emacs.d" ]; then
+  if [ -L "$HOME/.emacs.d" ]; then
+    ln -sf $PWD/.emacs.d $HOME/.emacs.d
+  else
+    echo "ERROR: $HOME/.emacs.d is a dir, NOT a symlink. Check or remove before retrying\n"
+  fi
+else
+  ln -sf $PWD/.emacs.d $HOME/.emacs.d
+fi
+
 #tmux
 if [ -f "$HOME/.tmux.conf" ]; then
   if [ -L "$HOME/.tmux.conf" ]; then
