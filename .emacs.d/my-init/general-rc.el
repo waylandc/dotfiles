@@ -1,9 +1,9 @@
 ;;==================== General setup================================
 
 ;; C-x C-f open files always changes the directory. This prevents that
-(add-hook 'find-file-hook
-          (lambda ()
-            (setq default-directory command-line-default-directory)))
+;;(add-hook 'find-file-hook
+;;          (lambda ()
+;;            (setq default-directory command-line-default-directory)))
 
 ;; turn off annoying backup files
 (setq make-backup-files nil)
