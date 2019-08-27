@@ -21,6 +21,9 @@
   (setq init-file-dir "~/.emacs.d"))
 (when (equal system-type 'darwin)
   (setq init-file-dir "~/.emacs.d"))
+
+(setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+
 (load (concat init-file-dir "/my-init/general-rc.el"))
 (load (concat init-file-dir "/my-init/appearance.el"))
 (load (concat init-file-dir "/my-init/company-rc.el"))
