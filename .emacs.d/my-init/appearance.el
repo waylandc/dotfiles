@@ -26,8 +26,9 @@
 ;; Setup font
 (when (equal system-type 'windows-nt)
 	(set-frame-font "Source Code Pro-12"))
-(when (equal system-type 'gnu-linux)
-	(set-frame-font "Consolas-13"))
+(when (equal system-type 'gnu/linux)
+	(set-frame-font "Roboto Mono-8"))
+;;	(set-frame-font "San Francisco Display-9"))
 (when (equal system-type 'darwin)
 	(set-frame-font "Roboto Mono for Powerline-14"))
 
@@ -35,7 +36,7 @@
   (set-face-attribute 'default nil :family "Consolas" :height 110))
 
 ;; Set default window size and location
-(setq my-res-width (nth 3 (car (car (display-monitor-attributes-list)))))
+(setq my-res-width (nth 3 (nth 1 (car (display-monitor-attributes-list)))))
 ;; work 2560x1440
 (if (eq my-res-width 2560)
     (progn
@@ -47,7 +48,7 @@
               (left . 1180)
               (top . 0)))
       (setq default-frame-alist
-            '(
+            '(							
               (tool-bar-lines . 0)
               (width . 170)
               (height . 80)

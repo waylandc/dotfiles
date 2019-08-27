@@ -7,7 +7,6 @@
   (setq rust-format-on-save t))
 
 (use-package racer :ensure t)
-(use-package cargo :ensure t)
 (use-package company :ensure t
   :config
   (setq company-idle-delay 0.2)

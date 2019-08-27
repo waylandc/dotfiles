@@ -17,7 +17,7 @@
 
 (when (equal system-type 'windows-nt)
   (setq init-file-dir "C:/Users/Wayland/.emacs.d"))
-(when (equal system-type 'gnu-linux)
+(when (equal system-type 'gnu/linux)
   (setq init-file-dir "~/.emacs.d"))
 (when (equal system-type 'darwin)
   (setq init-file-dir "~/.emacs.d"))
@@ -46,7 +46,7 @@
 	("ecba61c2239fbef776a72b65295b88e5534e458dfe3e6d7d9f9cb353448a569e" "fe666e5ac37c2dfcf80074e88b9252c71a22b6f5d2f566df9a7aa4f9bea55ef8" "d2e9c7e31e574bf38f4b0fb927aaff20c1e5f92f72001102758005e53d77b8c9" "bf798e9e8ff00d4bf2512597f36e5a135ce48e477ce88a0764cfb5d8104e8163" "8dce5b23232d0a490f16d62112d3abff6babeef86ae3853241a85856f9b0a6e7" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default)))
  '(package-selected-packages
    (quote
-	(rainbow-mode flymake-go twilight-bright-theme solarized-theme auto-complete-config go-snippets go-guru company-go go-mode use-package))))
+	(cargo rainbow-mode flymake-go twilight-bright-theme solarized-theme auto-complete-config go-snippets go-guru company-go go-mode use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

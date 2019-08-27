@@ -9,6 +9,7 @@
 (setq make-backup-files nil)
 ;; disable auto save
 (setq auto-save-default nil)
+(setq vc-follow-symlinks t)
 
 ;; flash visual bell instead of beeping for an error
 (setq visible-bell t)
