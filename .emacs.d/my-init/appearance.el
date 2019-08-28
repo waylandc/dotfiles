@@ -23,6 +23,9 @@
 (use-package subatomic256-theme :ensure t)
 (load-theme 'subatomic256 t)
 
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
 ;; Setup font
 (when (equal system-type 'windows-nt)
 	(set-frame-font "Source Code Pro-12"))
@@ -38,21 +41,22 @@
 ;; Set default window size and location
 (setq my-res-width (nth 3 (nth 1 (car (display-monitor-attributes-list)))))
 ;; work 2560x1440
+;; left was 1180
 (if (eq my-res-width 2560)
     (progn
       (setq initial-frame-alist
             '(
               (tool-bar-lines . 0)
-              (width . 170) ; chars
+              (width . 140) ; chars
               (height . 80) ; lines
-              (left . 1180)
+              (left . 0)
               (top . 0)))
       (setq default-frame-alist
             '(							
               (tool-bar-lines . 0)
-              (width . 170)
+              (width . 140)
               (height . 80)
-              (left . 1180)
+              (left . 0)
               (top . 0))))
  )
 
