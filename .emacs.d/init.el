@@ -1,3 +1,6 @@
+(unless (>= emacs-major-version 24)
+  (error "Emacs version 24 of higher is required"))
+
 ;; package.el
 (require 'package)
 (require 'cl)

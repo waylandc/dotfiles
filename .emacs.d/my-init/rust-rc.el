@@ -1,6 +1,6 @@
 ;; Pre-requisites:
 ;; rustup default nightly
-;; cargo component add rust-src
+;; rustup component add rust-src
 ;; cargo +nightly install racer
 
 ;; Flycheck-Begin. On the fly syntax checking for multiple programming languages.
