@@ -1,3 +1,6 @@
+(unless (>= emacs-major-version 24)
+  (error "Emacs version 24 of higher is required"))
+
 ;; package.el
 (require 'package)
 (require 'cl)
@@ -21,16 +24,21 @@
   (setq init-file-dir "~/.emacs.d"))
 (when (equal system-type 'darwin)
   (setq init-file-dir "~/.emacs.d"))
+
+(setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+
 (load (concat init-file-dir "/my-init/general-rc.el"))
 (load (concat init-file-dir "/my-init/appearance.el"))
 (load (concat init-file-dir "/my-init/company-rc.el"))
-(load (concat init-file-dir "/my-init/go.el"))
+; works(load (concat init-file-dir "/my-init/go.el"))
 (load (concat init-file-dir "/my-init/magit-rc.el"))
-;;load (concat init-file-dir "/my-init/tidy-web-rc.el"))
-(load (concat init-file-dir "/my-init/web-mode-rc.el"))
-(load (concat init-file-dir "/my-init/vuejs-rc.el"))
-(load (concat init-file-dir "/my-init/rr.el"))
-;;(load (concat init-file-dir "/my-init/js2-mode-rc.el"))
+(load (concat init-file-dir "/my-init/lsp-go.el"))
+;(load (concat init-file-dir "/my-init/lsp-rust.el"))
+;load (concat init-file-dir "/my-init/tidy-web-rc.el"))y
+;(load (concat init-file-dir "/my-init/web-mode-rc.el"))
+;(load (concat init-file-dir "/my-init/vuejs-rc.el"))
+(load (concat init-file-dir "/my-init/rust-rc.el"))
+;(load (concat init-file-dir "/my-init/js2-mode-rc.el"))
 
 
 (custom-set-variables
@@ -40,10 +48,10 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-	("ecba61c2239fbef776a72b65295b88e5534e458dfe3e6d7d9f9cb353448a569e" "fe666e5ac37c2dfcf80074e88b9252c71a22b6f5d2f566df9a7aa4f9bea55ef8" "d2e9c7e31e574bf38f4b0fb927aaff20c1e5f92f72001102758005e53d77b8c9" "bf798e9e8ff00d4bf2512597f36e5a135ce48e477ce88a0764cfb5d8104e8163" "8dce5b23232d0a490f16d62112d3abff6babeef86ae3853241a85856f9b0a6e7" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default)))
+	("11e57648ab04915568e558b77541d0e94e69d09c9c54c06075938b6abc0189d8" "ecba61c2239fbef776a72b65295b88e5534e458dfe3e6d7d9f9cb353448a569e" "fe666e5ac37c2dfcf80074e88b9252c71a22b6f5d2f566df9a7aa4f9bea55ef8" "d2e9c7e31e574bf38f4b0fb927aaff20c1e5f92f72001102758005e53d77b8c9" "bf798e9e8ff00d4bf2512597f36e5a135ce48e477ce88a0764cfb5d8104e8163" "8dce5b23232d0a490f16d62112d3abff6babeef86ae3853241a85856f9b0a6e7" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" default)))
  '(package-selected-packages
    (quote
-	(cargo rainbow-mode flymake-go twilight-bright-theme solarized-theme auto-complete-config go-snippets go-guru company-go go-mode use-package))))
+	(4clojure molokai-theme cargo rainbow-mode flymake-go twilight-bright-theme solarized-theme auto-complete-config go-snippets go-guru company-go go-mode use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

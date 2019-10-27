@@ -23,6 +23,16 @@ else
   ln -sf $PWD/.bashrc $HOME/.bashrc
 fi
 
+if [ -f "$HOME/.zshrc" ]; then
+  if [ -L "$HOME/.zshrc" ]; then
+    ln -sf $PWD/.zshrc $HOME/.bashrc
+  else
+    echo "ERROR: $HOME/.zshrc is a file, NOT a symlink. Check or remove before retrying\n"
+  fi
+else
+  ln -sf $PWD/.zshrc $HOME/.zshrc
+fi
+
 #vim
 if [ -d "$HOME/.vim" ]; then
   if [ -L "$HOME/.vim" ]; then
@@ -46,12 +56,15 @@ fi
 
 #emacs
 if [ -d "$HOME/.emacs.d" ]; then
+  echo ".emacs.d exists\n"
   if [ -L "$HOME/.emacs.d" ]; then
-    ln -sf $PWD/.emacs.d $HOME/.emacs.d
+    echo ".emacs.d symlink already exists\n"
+#    ln -sf $PWD/.emacs.d $HOME/.emacs.d
   else
     echo "ERROR: $HOME/.emacs.d is a dir, NOT a symlink. Check or remove before retrying\n"
   fi
 else
+  echo ".emacs.d doesn't exist, creating symlink\n"
   ln -sf $PWD/.emacs.d $HOME/.emacs.d
 fi
 

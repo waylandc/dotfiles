@@ -23,91 +23,34 @@
 (use-package subatomic256-theme :ensure t)
 (load-theme 'subatomic256 t)
 
-;; Setup font
-(when (equal system-type 'windows-nt)
-	(set-frame-font "Source Code Pro-12"))
-(when (equal system-type 'gnu/linux)
-	(set-frame-font "Roboto Mono-8"))
-;;	(set-frame-font "San Francisco Display-9"))
-(when (equal system-type 'darwin)
-	(set-frame-font "Roboto Mono for Powerline-14"))
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
 
-(when (equal system-type 'windows-nt)
-  (set-face-attribute 'default nil :family "Consolas" :height 110))
+;; Setup font by checking if it exists on this system first
+;; List them in order of preference as it'll use the first one found
+(defun font-exists-p (font) "check if font exists" (if (null(x-list-fonts font)) nil t))
+(cond
+  ((if (font-exists-p "Hack Nerd Font") (set-face-attribute 'default nil :font "Hack Nerd Font-14")))
+  ((if (font-exists-p "Helvetica Neue") (set-face-attribute 'default nil :font "Helvetica Neue-14")))
+  ((if (font-exists-p "Optima") (set-face-attribute 'default nil :font "Optima-14")))
+  ((if (font-exists-p "Roboto") (set-face-attribute 'default nil :font "Roboto Mono-12")))
+  ((if (font-exists-p "Source Code Pro") (set-face-attribute 'default nil :font "Source Code Pro-12")))
+  ((if (font-exists-p "Consolas") (set-face-attribute 'default nil :family "Consolas" :height 110))))
 
-;; Set default window size and location
-(setq my-res-width (nth 3 (nth 1 (car (display-monitor-attributes-list)))))
-;; work 2560x1440
-(if (eq my-res-width 2560)
-    (progn
-      (setq initial-frame-alist
-            '(
-              (tool-bar-lines . 0)
-              (width . 170) ; chars
-              (height . 80) ; lines
-              (left . 1180)
-              (top . 0)))
-      (setq default-frame-alist
-            '(							
-              (tool-bar-lines . 0)
-              (width . 170)
-              (height . 80)
-              (left . 1180)
-              (top . 0))))
- )
+;(set-frame-width (selected-frame) 110)
+;(set-frame-height (selected-frame) 70)
+(setq initial-frame-alist
+      '(
+        (tool-bar-lines . 0)
+        (width . 110) ; chars
+        (height . 70) ; lines
+        (left . 0)
+        (top . 0)))
+(setq default-frame-alist
+      '(							
+        (tool-bar-lines . 0)
+        (width . 110)
+        (height . 70)
+        (left . 0)
+        (top . 0)))
 
-;; rMBP More Space 1680x1050
-(if (eq my-res-width 1680)
-    (progn
-      (setq initial-frame-alist
-            '(
-              (tool-bar-lines . 0)
-              (width . 100) ; chars
-              (height . 60) ; lines
-              (left . 880)
-              (top . 0)))
-      (setq default-frame-alist
-            '(
-              (tool-bar-lines . 0)
-              (width . 100)
-              (height . 60)
-              (left . 880)
-              (top . 0))))
-)
-
-;; rMBP Default 1440x900
-(if (eq my-res-width 1440)
-    (progn
-      (setq initial-frame-alist
-            '(
-              (tool-bar-lines . 0)
-              (width . 100) ; chars
-              (height . 50) ; lines
-              (left . 630)
-              (top . 0)))
-      (setq default-frame-alist
-            '(
-              (tool-bar-lines . 0)
-              (width . 100)
-              (height . 50)
-              (left . 630)
-              (top . 0))))
-  )
-;; home 
-(if (eq my-res-width 3840)
-    (progn
-      (setq initial-frame-alist
-            '(
-              (tool-bar-lines . 0)
-              (width . 190) ; chars
-              (height . 85) ; lines
-              (left . 1910)
-              (top . 0)))
-      (setq default-frame-alist
-            '(
-              (tool-bar-lines . 0)
-              (width . 190)
-              (height . 85)
-              (left . 1910)
-              (top . 0))))
-)

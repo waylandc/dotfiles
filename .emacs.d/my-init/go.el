@@ -13,7 +13,7 @@
 (use-package company-go)
 (use-package go-guru :demand t)
 (use-package go-dlv)
-(use-package flymake-go :ensure t)
+ (use-package flymake-go :ensure t)
 
 
 (defun my-go-mode-hook() 
@@ -51,11 +51,10 @@
 		 (add-to-list 'flycheck-checkers 'go-gofmt)))
 	(eval-after-load 'go-mode'
 	  '(require 'flymake-go))
-)
+ )
 
 (add-hook 'go-mode-hook (lambda ()
 	(set (make-local-variable 'company-backends) '(company-go))
 	(company-mode)))
 
-(add-hook 'go-mode-hook 'my-go-mode-hook) 
-
+(add-hook 'go-mode-hook 'my-go-mode-hook)
