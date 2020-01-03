@@ -1,9 +1,12 @@
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/.cargo/bin:/usr/local/bin:$PATH
 export PATH="$HOME/mybin:$HOME/Downloads/parity-binaries:$HOME/work/protoc-3.6.1-osx-x86_64/bin:$HOME/go/bin:$PATH"
+export DISPLAY=$(ifconfig en0 | awk '/inet /{print $2 ":0"}')
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/waylandchan/.oh-my-zsh"
+
+fpath=(/usr/share/zsh/$ZSH_VERSION/functions/ $fpath)
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -109,15 +112,41 @@ alias hkec2='ssh -i ~/Documents/aws/hk-ec2-substrate.pem ubuntu@ec2-18-162-125-2
 alias proto='protoc --go_out=. *.proto'
 alias offlinegodoc='godoc -http=:6060'
 # open firefox allowing me to select profile
-alias startff='/Applications/Firefox.app/Contents/MacOS/firefox-bin -P -no-remote'
+alias ffpm='/Applications/Firefox.app/Contents/MacOS/firefox-bin -P -no-remote &!'
 
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='fd --type f'
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
 if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
   # nix environment variables
   . $HOME/.nix-profile/etc/profile.d/nix.sh
 fi
 
-eval "$(direnv hook bash)"
+eval "$(direnv hook zsh)"
+
+# place this after nvm initialization!
+autoload -U add-zsh-hook
+load-nvmrc() {
+  local node_version="$(nvm version)"
+  local nvmrc_path="$(nvm_find_nvmrc)"
+
+  if [ -n "$nvmrc_path" ]; then
+    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+
+    if [ "$nvmrc_node_version" = "N/A" ]; then
+      nvm install
+    elif [ "$nvmrc_node_version" != "$node_version" ]; then
+      nvm use
+    fi
+  elif [ "$node_version" != "$(nvm version default)" ]; then
+    echo "Reverting to nvm default version"
+    nvm use default
+  fi
+}
+add-zsh-hook chpwd load-nvmrc
+load-nvmrc
+
