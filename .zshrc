@@ -1,6 +1,10 @@
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/.cargo/bin:/usr/local/bin:$PATH
 export PATH="$HOME/mybin:$HOME/Downloads/parity-binaries:$HOME/work/protoc-3.6.1-osx-x86_64/bin:$HOME/go/bin:$PATH"
+# below openssl and ruby added for macos ruby only
+export PATH="/usr/local/opt/openssl@1.1/bin:$HOME/.gem/ruby/2.6.3/bin:$PATH"
+
+# set DISPLAY for 
 export DISPLAY=$(ifconfig en0 | awk '/inet /{print $2 ":0"}')
 
 # Path to your oh-my-zsh installation.
@@ -113,7 +117,9 @@ alias proto='protoc --go_out=. *.proto'
 alias offlinegodoc='godoc -http=:6060'
 # open firefox allowing me to select profile
 alias ffpm='/Applications/Firefox.app/Contents/MacOS/firefox-bin -P -no-remote &!'
+alias em='emacsclient -t -a "" -c "$@"'
 
+export LC_ALL=en_US.UTF-8
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='fd --type f'
@@ -149,4 +155,6 @@ load-nvmrc() {
 }
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
+
+RPROMPT="%{$fg[yellow]%}[%@]"
 
