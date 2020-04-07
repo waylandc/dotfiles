@@ -45,18 +45,6 @@
   :init
   (evil-mode 1))
 
-;; Setup font by checking if it exists on this system first
-;; List them in order of preference as it'll use the first one found
-;; WC why are we doiing fonts again here??
-;;(defun font-exists-p (font) "check if font exists" (if (null(x-list-fonts font)) nil t))
-;;  (cond
-;;    ((if (font-exists-p "Hack Nerd Font") (set-face-attribute 'default nil :font "Hack Nerd Font-14")))
-;;    ((if (font-exists-p "Helvetica Neue") (set-face-attribute 'default nil :font "Helvetica Neue-14")))
-;;    ((if (font-exists-p "Optima") (set-face-attribute 'default nil :font "Optima-14")))
-;;    ((if (font-exists-p "Roboto") (set-face-attribute 'default nil :font "Roboto Mono-12")))
-;;    ((if (font-exists-p "Source Code Pro") (set-face-attribute 'default nil :font "Source Code Pro-12")))
-;;    ((if (font-exists-p "Consolas") (set-face-attribute 'default nil :family "Consolas" :height 110))))
-
 ;; setup ivy, counsel and swiper for completion and search
 (use-package counsel
   :diminish ivy-mode counsel-mode
@@ -106,7 +94,7 @@
       (cons '("grep" utf-8 . utf-8) process-coding-system-alist))
 
 ;; Quiet Startup
-(setq inhibit-startup-screen t)
+;;(setq inhibit-startup-screen t)
 (setq inhibit-startup-message t)
 (setq inhibit-startup-echo-area-message t)
 (setq initial-scratch-message nil)
@@ -165,6 +153,7 @@
     (smartparens-global-mode 1)
     (show-paren-mode t)))
 
+;; this is fairly useless now that I mainly use in terminal
 (if (display-graphic-p)
     (progn
       ;; UI parts
@@ -196,6 +185,7 @@
 
 ;; macOS
 (when (equal system-type 'darwin)
+  (setq mac-command-key-is-meta t)
   ;; WC these modifers aren't working. I don't notice anything different
                                         ;  (setq mac-option-modifier 'super)
                                         ;  (setq mac-command-modifier 'meta)
@@ -519,6 +509,17 @@
 (defun vue-mode/init-vue-mode ()
   "Initialize my package"
   (use-package vue-mode))
+
+;; Protobufs mode
+
+(use-package protobuf-mode)
+
+(defconst my-protobuf-style
+        '((c-basic-offset . 4)
+                (indent-tabs-mode . t)))
+
+(add-hook 'protobuf-mode-hook
+        (lambda () (c-add-style "my-style" my-protobuf-style t)))
 
 ;; Setup LLDB debugging for use in Rust
 ;; WC todo dap-lldb is unavailable
