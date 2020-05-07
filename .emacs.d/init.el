@@ -31,11 +31,7 @@
 (require 'diminish)
 (require 'bind-key)
 
-                                        ;(use-package monokai-theme :ensure t)
-;; (use-package spacemacs-theme :defer t
-;;   :init
-;;   (load-theme 'spacemacs-dark t))
-
+;;(use-package monokai-theme :ensure t)
 (use-package color-theme-sanityinc-tomorrow :defer t
   :init
   (load-theme 'sanityinc-tomorrow-eighties t))
@@ -44,6 +40,8 @@
 (use-package evil :ensure
   :init
   (evil-mode 1))
+
+(use-package ivy)
 
 ;; setup ivy, counsel and swiper for completion and search
 (use-package counsel
@@ -94,7 +92,6 @@
       (cons '("grep" utf-8 . utf-8) process-coding-system-alist))
 
 ;; Quiet Startup
-;;(setq inhibit-startup-screen t)
 (setq inhibit-startup-message t)
 (setq inhibit-startup-echo-area-message t)
 (setq initial-scratch-message nil)
@@ -211,10 +208,10 @@
   :hook (after-init . which-key-mode))
 
 ;; WC we're not using yas yet so comment it out
-                                        ;(use-package yasnippet
-                                        ;  :ensure t
-                                        ;  :diminish yas-minor-mode
-                                        ;  :hook (after-init . yas-global-mode))
+;;(use-package yasnippet
+;;  :ensure t
+;;  :diminish yas-minor-mode
+;;  :hook (after-init . yas-global-mode))
 
 ;; Magit
 (use-package magit
@@ -445,6 +442,11 @@
 
 (add-hook 'js-mode-hook #'setup-tide-mode)
 
+(use-package js2-mode
+  :ensure t
+  :config
+    (add-hook 'js-mode-hook 'js2-minor-mode))
+
 ;; Prettier for best JS formatting
 ;; Note - you have have prettier installed on OS npm install -g prettier
 (use-package prettier-js
@@ -463,11 +465,9 @@
 
 (use-package web-mode
   :ensure t
-  :mode (("\\.html\\'" . web-mode)
-         ("\\.[jt]sx?\\'" . web-mode))
+  :mode (("\\.html\\'" . web-mode))
   :config
-  (setq web-mode-content-types-alist '(("jsx" . "\\.[jt]sx?\\'"))
-        web-mode-markup-indent-offset 2
+  (setq web-mode-markup-indent-offset 2
         web-mode-css-indent-offset 2
         web-mode-code-indent-offset 2
         web-mode-block-padding 2
@@ -491,14 +491,6 @@
   :hook (web-mode . setup-tide-mode)
   :ensure t)
 
-;; for better jsx syntax-highlighting in web-mode
-;; - courtesy of Patrick @halbtuerke
-;; (defadvice web-mode-highlight-part (around tweak-jsx activate)
-;;   (if (equal web-mode-content-type "jsx")
-;;       (let ((web-mode-enable-part-face nil))
-;;         ad-do-it)
-;;     ad-do-it))
-
 ;; VueJS setup
 (use-package vue-mode)
 (use-package vue-html-mode)
@@ -511,7 +503,6 @@
   (use-package vue-mode))
 
 ;; Protobufs mode
-
 (use-package protobuf-mode)
 
 (defconst my-protobuf-style
@@ -532,24 +523,16 @@
                                         ;    (tooltip-mode 1))
                                         ;(use-package dap-lldb :ensure t)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ag-highlight-search t t)
- '(ag-reuse-buffers t t)
- '(ag-reuse-window t t)
- '(custom-safe-themes
-   '("a0feb1322de9e26a4d209d1cfa236deaf64662bb604fa513cca6a057ddf0ef64" "7356632cebc6a11a87bc5fcffaa49bae528026a78637acd03cae57c091afd9b9" "04dd0236a367865e591927a3810f178e8d33c372ad5bfef48b5ce90d4b476481" "1a212b23eb9a9bedde5ca8d8568b1e6351f6d6f989dd9e9de7fba8621e8ef82d" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "bf798e9e8ff00d4bf2512597f36e5a135ce48e477ce88a0764cfb5d8104e8163" "c9ddf33b383e74dac7690255dd2c3dfa1961a8e8a1d20e401c6572febef61045" "36ca8f60565af20ef4f30783aa16a26d96c02df7b4e54e9900a5138fb33808da" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "285d1bf306091644fb49993341e0ad8bafe57130d9981b680c1dbd974475c5c7" "2540689fd0bc5d74c4682764ff6c94057ba8061a98be5dd21116bf7bf301acfb" "51ec7bfa54adf5fff5d466248ea6431097f5a18224788d0bd7eb1257a4f7b773" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "c433c87bd4b64b8ba9890e8ed64597ea0f8eb0396f4c9a9e01bd20a04d15d358" "830877f4aab227556548dc0a28bf395d0abe0e3a0ab95455731c9ea5ab5fe4e1" "2809bcb77ad21312897b541134981282dc455ccd7c14d74cc333b6e549b824f3" "0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75" "d7383f47263f7969baf3856ab8b3df649eb77eafdff0c5731bee2ad18e0faed2" "a2cde79e4cc8dc9a03e7d9a42fabf8928720d420034b66aecc5b665bbf05d4e9" default))
- '(ivy-count-format "%d/%d " t)
- '(ivy-use-virtual-buffers t t)
- '(magit-auto-revert-mode nil)
- '(package-selected-packages
-   '(alect-themes gruber-darker-theme ample-theme color-theme-sanityinc-tomorrow afternoon-theme wgrep-ag solarized-theme cargo yasnippet yaml-mode which-key use-package subatomic256-theme smartparens rainbow-delimiters racer quelpa protobuf-mode powerline pbcopy markdown-toc magit lsp-ui ivy hungry-delete go-guru flycheck-rust diminish company-lsp all-the-icons)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(ivy which-key web-mode vue-mode use-package twilight-bright-theme tide subatomic256-theme solarized-theme smartparens rainbow-mode rainbow-delimiters racer protobuf-mode prettier-js powerline pbcopy molokai-theme magit lsp-ui js2-mode hungry-delete gotest go-tag go-snippets go-guru go-dlv flymake-go flycheck-rust evil diminish dap-mode counsel company-quickhelp company-posframe company-lsp company-go company-box color-theme-sanityinc-tomorrow cargo autopair all-the-icons ag 4clojure)))
