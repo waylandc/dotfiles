@@ -513,6 +513,16 @@
 (add-hook 'protobuf-mode-hook
         (lambda () (c-add-style "my-style" my-protobuf-style t)))
 
+(use-package solidity-mode
+  :ensure t
+  :no-require t)
+(use-package company-solidity
+  :ensure t
+  :no-require t
+  :config (add-hook 'solidity-mode-hook
+                    (lambda ()
+                      (my-company-add-backend-locally 'company-solidity))))
+
 ;; Setup LLDB debugging for use in Rust
 ;; WC todo dap-lldb is unavailable
                                         ;(use-package dap-mode 
@@ -535,5 +545,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ag-highlight-search t t)
+ '(ag-reuse-buffers t t)
+ '(ag-reuse-window t t)
+ '(ivy-count-format "%d/%d ")
+ '(ivy-use-virtual-buffers t)
+ '(magit-auto-revert-mode nil)
  '(package-selected-packages
-   '(ivy which-key web-mode vue-mode use-package twilight-bright-theme tide subatomic256-theme solarized-theme smartparens rainbow-mode rainbow-delimiters racer protobuf-mode prettier-js powerline pbcopy molokai-theme magit lsp-ui js2-mode hungry-delete gotest go-tag go-snippets go-guru go-dlv flymake-go flycheck-rust evil diminish dap-mode counsel company-quickhelp company-posframe company-lsp company-go company-box color-theme-sanityinc-tomorrow cargo autopair all-the-icons ag 4clojure)))
+   '(cyberpunk-theme cyberpunk-2019-theme ample-theme ivy which-key web-mode vue-mode use-package twilight-bright-theme tide subatomic256-theme solarized-theme smartparens rainbow-mode rainbow-delimiters racer protobuf-mode prettier-js powerline pbcopy molokai-theme magit lsp-ui js2-mode hungry-delete gotest go-tag go-snippets go-guru go-dlv flymake-go flycheck-rust evil diminish dap-mode counsel company-quickhelp company-posframe company-lsp company-go company-box color-theme-sanityinc-tomorrow cargo autopair all-the-icons ag 4clojure)))
