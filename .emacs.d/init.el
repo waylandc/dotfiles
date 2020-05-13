@@ -365,6 +365,7 @@
                 company-idle-delay 1         		;; wait 1s before company popup
                 rust-format-on-save t
                 tab-width 4)
+  (setq lsp-rust-server 'rust-analyzer-mac)
   ) 			;; requires `rustup component add rustfmt
 
 (use-package racer :ensure t
