@@ -76,7 +76,7 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git cargo fzf rust)
+plugins=(git cargo fzf rust nvm brew)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -158,3 +158,9 @@ load-nvmrc
 
 RPROMPT="%{$fg[yellow]%}[%@]"
 
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/waylandchan/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/waylandchan/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/waylandchan/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/waylandchan/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
