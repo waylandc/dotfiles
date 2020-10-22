@@ -22,6 +22,7 @@
     (package-install 'use-package)
     (package-install 'diminish)
     (package-install 'quelpa)
+    ;;; bind-key.el --- A simple way to manage personal keybindings
     (package-install 'bind-key))
 
   (setq use-package-always-ensure t)
@@ -37,6 +38,7 @@
   (load-theme 'sanityinc-tomorrow-eighties t))
 
 
+(setq evil-want-C-u-scroll t)
 (use-package evil :ensure
   :init
   (evil-mode 1))
@@ -97,9 +99,10 @@
 (setq initial-scratch-message nil)
 (tool-bar-mode 0)
 (menu-bar-mode 0)
-(defun display-startup-echo-area-message ()
+(display-time-mode 1)
+(defun display-startup-echo-area-message () 
   (message ""))
-
+(xterm-mouse-mode 1)
 (setq frame-title-format nil)
 (setq ring-bell-function 'ignore)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets) ; Show path if names are same
@@ -118,11 +121,47 @@
 ;;(setq-default indent-tabs-mode t)   ; use space
 ;;(setq-default tab-width 4)
 (defalias 'yes-or-no-p #'y-or-n-p)
+(use-package smart-mode-line)
+
+(use-package helm
+  :diminish helm-mode
+  :init
+  (progn
+    (require 'helm-config)
+    (setq helm-candidate-number-limit 100)
+    ;; From https://gist.github.com/antifuchs/9238468
+    (setq helm-idle-delay 0.0 ; update fast sources immediately (doesn't).
+          helm-input-idle-delay 0.01  ; this actually updates things
+                                        ; reeeelatively quickly.
+          helm-yas-display-key-on-candidate t
+          helm-quick-update t
+          helm-M-x-requires-pattern nil
+          helm-ff-skip-boring-files t)
+    (helm-mode))
+  :bind (("C-c h" . helm-mini)
+         ("C-h a" . helm-apropos)
+         ("C-x C-b" . helm-buffers-list)
+         ("C-x b" . helm-buffers-list)
+         ("M-y" . helm-show-kill-ring)
+         ("M-x" . helm-M-x)
+         ("C-x c o" . helm-occur)
+         ("C-x c s" . helm-swoop)
+         ("C-x c y" . helm-yas-complete)
+         ("C-x c Y" . helm-yas-create-snippet-on-region)
+         ("C-x c b" . my/helm-do-grep-book-notes)
+         ("C-x c SPC" . helm-all-mark-rings)))
+(ido-mode -1) ;; Turn off ido mode in case I enabled it accidentally
+
+;; great for describing bindings
+(use-package helm-descbinds
+  :defer t
+  :bind (("C-h b" . helm-descbinds)
+         ("C-h w" . helm-descbinds)))
 
 ;; Delete selection if insert someting
-(use-package delsel
-  :ensure nil
-  :hook (after-init . delete-selection-mode))
+;; (use-package delsel
+;;   :ensure nil
+;;   :hook (after-init . delete-selection-mode))
 
 ;; Automatically reload files was modified by external program
 (use-package autorevert
@@ -131,10 +170,12 @@
   :hook (after-init . global-auto-revert-mode))
 
 ;; Hungry deletion
-(use-package hungry-delete
-  :diminish
-  :hook (after-init . global-hungry-delete-mode)
-  :config (setq-default hungry-delete-chars-to-skip " \t\f\v"))
+;; WC how to configure this?
+;; (use-package hungry-delete
+;;   :diminish
+;;   :hook (after-init . global-hungry-delete-mode)
+;;   :config
+;;   (setq-default hungry-delete-chars-to-skip " \t\f\v"))
 
 ;; Smartparens
 (use-package smartparens
@@ -208,10 +249,10 @@
   :hook (after-init . which-key-mode))
 
 ;; WC we're not using yas yet so comment it out
-;;(use-package yasnippet
-;;  :ensure t
-;;  :diminish yas-minor-mode
-;;  :hook (after-init . yas-global-mode))
+(use-package yasnippet
+  :ensure t
+  :diminish yas-minor-mode
+  :hook (after-init . yas-global-mode))
 
 ;; Magit
 (use-package magit
@@ -365,7 +406,7 @@
                 company-idle-delay 1         		;; wait 1s before company popup
                 rust-format-on-save t
                 tab-width 4)
-  (setq lsp-rust-server 'rust-analyzer-mac)
+  (setq lsp-rust-server 'rust-analyzer)
   ) 			;; requires `rustup component add rustfmt
 
 (use-package racer :ensure t
@@ -383,7 +424,7 @@
 
 ;; Path to rust source.
 (when (equal system-type 'gnu/linux)
-  (setq racer-rust-src-path (concat (getenv "RUSTUP_HOME") "/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"))
+  (setq racer-rust-src-path (concat (getenv "HOME") "/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src"))
   (setq racer-cmd (concat (getenv "CARGO_HOME") "/bin/racer")))
 (when (equal system-type 'darwin)
   (setq racer-rust-src-path (concat (getenv "HOME") "/.rustup/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src"))
@@ -534,6 +575,8 @@
                                         ;    (tooltip-mode 1))
                                         ;(use-package dap-lldb :ensure t)
 
+(use-package org)
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -548,8 +591,10 @@
  '(ag-highlight-search t t)
  '(ag-reuse-buffers t t)
  '(ag-reuse-window t t)
+ '(custom-safe-themes
+   '("628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))
  '(ivy-count-format "%d/%d ")
  '(ivy-use-virtual-buffers t)
  '(magit-auto-revert-mode nil)
  '(package-selected-packages
-   '(cyberpunk-theme cyberpunk-2019-theme ample-theme ivy which-key web-mode vue-mode use-package twilight-bright-theme tide subatomic256-theme solarized-theme smartparens rainbow-mode rainbow-delimiters racer protobuf-mode prettier-js powerline pbcopy molokai-theme magit lsp-ui js2-mode hungry-delete gotest go-tag go-snippets go-guru go-dlv flymake-go flycheck-rust evil diminish dap-mode counsel company-quickhelp company-posframe company-lsp company-go company-box color-theme-sanityinc-tomorrow cargo autopair all-the-icons ag 4clojure)))
+   '(smart-mode-line yasnippet cyberpunk-theme cyberpunk-2019-theme ample-theme ivy which-key web-mode vue-mode use-package twilight-bright-theme tide subatomic256-theme solarized-theme smartparens rainbow-mode rainbow-delimiters racer protobuf-mode prettier-js powerline pbcopy molokai-theme magit lsp-ui js2-mode hungry-delete gotest go-tag go-snippets go-guru go-dlv flymake-go flycheck-rust evil diminish dap-mode counsel company-quickhelp company-posframe company-lsp company-go company-box color-theme-sanityinc-tomorrow cargo autopair all-the-icons ag 4clojure)))
