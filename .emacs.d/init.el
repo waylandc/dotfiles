@@ -25,19 +25,22 @@
     ;;; bind-key.el --- A simple way to manage personal keybindings
     (package-install 'bind-key))
 
+  (defvar use-package-always-ensure)
   (setq use-package-always-ensure t)
+  (defvar use-package-expand-minimally)
   (setq use-package-expand-minimally t)
 
-  (require 'use-package))
+(require 'use-package))
 (require 'diminish)
 (require 'bind-key)
 
 ;;(use-package monokai-theme :ensure t)
-(use-package color-theme-sanityinc-tomorrow :defer t
+(use-package doom-themes :defer t
   :init
-  (load-theme 'sanityinc-tomorrow-eighties t))
+  (load-theme 'doom-material t))
 
 
+(defvar evil-want-C-u-scroll)
 (setq evil-want-C-u-scroll t)
 (use-package evil :ensure
   :init
@@ -121,6 +124,12 @@
 ;;(setq-default indent-tabs-mode t)   ; use space
 ;;(setq-default tab-width 4)
 (defalias 'yes-or-no-p #'y-or-n-p)
+
+;; Extension mappings
+;;(add-to-list 'auto-mode-alist '("\\.org\\" . org-mode))
+;;(add-to-list 'auto-mode-alist '("\\.md\\" . markdown-mode))
+;; (add-to-list 'auto-mode-alist '("\\.markdown\\" . markdown-mode))
+
 (use-package smart-mode-line)
 
 (use-package helm
@@ -130,6 +139,11 @@
     (require 'helm-config)
     (setq helm-candidate-number-limit 100)
     ;; From https://gist.github.com/antifuchs/9238468
+    (defvar helm-idle-delay)
+    (defvar helm-yas-display-key-on-candidate)
+    (defvar helm-quick-update)
+    (defvar helm-M-x-requires-pattern)
+    (defvar helm-ff-skip-boring-files)
     (setq helm-idle-delay 0.0 ; update fast sources immediately (doesn't).
           helm-input-idle-delay 0.01  ; this actually updates things
                                         ; reeeelatively quickly.
@@ -158,24 +172,11 @@
   :bind (("C-h b" . helm-descbinds)
          ("C-h w" . helm-descbinds)))
 
-;; Delete selection if insert someting
-;; (use-package delsel
-;;   :ensure nil
-;;   :hook (after-init . delete-selection-mode))
-
 ;; Automatically reload files was modified by external program
 (use-package autorevert
   :ensure nil
   :diminish
   :hook (after-init . global-auto-revert-mode))
-
-;; Hungry deletion
-;; WC how to configure this?
-;; (use-package hungry-delete
-;;   :diminish
-;;   :hook (after-init . global-hungry-delete-mode)
-;;   :config
-;;   (setq-default hungry-delete-chars-to-skip " \t\f\v"))
 
 ;; Smartparens
 (use-package smartparens
@@ -223,6 +224,7 @@
 
 ;; macOS
 (when (equal system-type 'darwin)
+  (defvar mac-command-key-is-meta)
   (setq mac-command-key-is-meta t)
   ;; WC these modifers aren't working. I don't notice anything different
                                         ;  (setq mac-option-modifier 'super)
@@ -262,41 +264,12 @@
   ("M-g s" . magit-status))
 
 
-;; Go Lang setup
-(defun install-go ()
-  (interactive)
-  (if (system-is-linux)
-      (call-process-shell-command "sudo apt-get install golang" nil (current-buffer) nil))
-  (call-process-shell-command "go get -u github.com/mdempsky/gocode" nil (current-buffer) nil)
-  (call-process-shell-command "go get -u github.com/derekparker/delve/cmd/dlv" nil (current-buffer) nil)
-  (call-process-shell-command "go get -u github.com/kisielk/errcheck" nil (current-buffer) nil)
-  (call-process-shell-command "go get -u golang.org/x/tools/cmd/godoc" nil (current-buffer) nil))
-
- ; ladicle golang
- ;(use-package go-mode
- ;  :mode "\\.go\\'"
- ;  :custom (gofmt-command "goimports"
- ;  :bind (:map go-mode-map
- ;    ("C-c C-n" . go-run)
- ;    ("C-c ."   . go-test-current-test)
- ;    ("C-c f"   . go-test-current-file)
- ;    ("C-c a"   . go-test-current-project))
- ;  :config
- ;    (add-hook 'before-save-hook #'gofmt-before-save)
- ;    (use-package gotest)
- ;    (use-package go-tag
- ;      :config (setq go-tag-args (list "-transform" "camelcase")))))
- ;
- ; end ladicle golang
-
-
-(use-package go-guru
-  :defer)
 (use-package company 
   :ensure t
   :diminish company-mode
   :config
   (setq company-selection-wrap-around t)
+  (defvar company-minimum-prefex-length)
   (setq company-minimum-prefex-length 1)
   (setq company-tooltip-align-annotations t)
   (add-hook 'after-init-hook #'global-company-mode)
@@ -307,11 +280,13 @@
 ;  :diminish
 ;  :hook (company-mode . company-box-mode))
 
+(use-package go-guru :after go-mode)
+
 (use-package go-mode
+  :mode "\\.go\\'"
   :init
   (setq gofmt-command "goimports"     ; use goimports instead of gofmt
-        go-fontify-function-calls nil ; fontifing names of called
-                                        ; functions is too much for me
+        go-fontify-function-calls nil ; https://lupan.pl/dotemacs/
         company-idle-delay 1)         ; wait 1s before company popup
   :bind
   (:map go-mode-map
@@ -323,65 +298,16 @@
         ("C-i"      . company-indent-or-complete-common)
         ("C-M-i"    . company-indent-or-complete-common)
         )
-  :config
-  (require 'go-guru)
-  (add-hook 'go-mode-hook #'lsp)
+  :hook ((go-mode . lsp)
+         (go-mode . smartparens-mode)))
+   
+  
+;;  :config
   ;;(add-hook 'go-mode-hook #'smartparens-mode)
-  (add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
-  (add-hook 'before-save-hook #'gofmt-before-save))
-                                        ;    (go-guru-hl-identifier-mode)
-                                        ;    (local-set-key (kbd "M-.") 'godef-jump)
-                                        ;    (local-set-key (kbd "M-*") 'pop-tag-mark)
-                                        ;    (local-set-key (kbd "M-p") 'compile)
-                                        ;    (local-set-key (kbd "M-P") 'recompile)
-                                        ;    (local-set-key (kbd "M-]") 'next-error)
-(set (make-local-variable 'compile-command) "go build -v && go test -v && go vet")
+ ;; (add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
+ ;; (add-hook 'before-save-hook #'gofmt-before-save)
+ ;; (set (make-local-variable 'compile-command) "go build -v && go test -v && go vet"))
 
-;; (use-package go-dlv)
-
-;; (defun my-go-mode-hook()
-;;  (use-package go-snippets :ensure t)
-;;  (go-snippets-initialize)
-
-;; ;;WC (autoload 'helm-go-package "helm-go-package") ;; Not necessary if using ELPA package
-;;  (eval-after-load 'go-mode
-;;  '(substitute-key-definition 'go-import-add 'helm-go-package go-mode-map))
-
-;;  (add-hook 'before-save-hook 'gofmt-before-save)
-;;  (setq gofmt-command "goimports")
-;;  (if (not (string-match "go" compile-command))
-;;    (set (make-local-variable 'compile-command) "go build -v && go test -v && go vet"))
-
-;;  (local-set-key (kbd "C-c m") 'gofmt)
-;;  ;; guru settings
-;;  (go-guru-hl-identifier-mode)
-;;  (local-set-key (kbd "M-.") 'godef-jump)
-;;  (local-set-key (kbd "M-*") 'pop-tag-mark)
-;;  (local-set-key (kbd "M-p") 'compile)
-;;  (local-set-key (kbd "M-P") 'recompile)
-;;  (local-set-key (kbd "M-]") 'next-error)
-;;  (local-set-key (kbd "M-[") 'previous-error)
-;;  ;; (auto-complete-mode 1)
-;;  ;;(yas-minor-mode-on)
-
-;;  (eval-after-load 'go-mode'
-;;    '(progn
-;;     (flycheck-declare-checker go-gofmt
-;;                   "A Go syntax and style checker using the gofmt utility."
-;;                   :command '("gofmt" source-inplace)
-;;                   :error-patterns '(("^\\(?1:.*\\):\\(?2:[0-9]+\\):\\(?3:[0-9]+\\): \\(?4:.*\\)$" error))
-;;                   :modes 'go-mode)
-;;     (add-to-list 'flycheck-checkers 'go-gofmt)))
-;;  (eval-after-load 'go-mode'
-;;    '(require 'flymake-go))
-;; )
-
-;; (add-hook 'go-mode-hook (lambda ()
-;;  (set (make-local-variable 'company-backends) '(company-go))
-;;  (company-mode)))
-
-;; (add-hook 'go-mode-hook 'my-go-mode-hook)
-;; end Golang
 
 ;; Rust
 (use-package flycheck :ensure t
@@ -406,6 +332,7 @@
                 company-idle-delay 1         		;; wait 1s before company popup
                 rust-format-on-save t
                 tab-width 4)
+  (defvar lsp-rust-server)
   (setq lsp-rust-server 'rust-analyzer)
   ) 			;; requires `rustup component add rustfmt
 
@@ -438,17 +365,26 @@
 
 (use-package lsp-mode
   :ensure t
-  :config
-  (add-hook 'go-mode-hook #'lsp)
-  (add-hook 'rust-mode-hook #'lsp)
-  (setq lsp-prefer-flymake nil)
-  )
+  :commands lsp
+    ;; reformat code and add missing (or remove old) imports
+  :hook ((before-save . lsp-format-buffer)
+         (before-save . lsp-organize-imports))
+  :bind (("C-c d" . lsp-describe-thing-at-point)
+         ("C-c e n" . flymake-goto-next-error)
+         ("C-c e p" . flymake-goto-prev-error)
+         ("C-c e r" . lsp-find-references)
+         ("C-c e R" . lsp-rename)
+         ("C-c e i" . lsp-find-implementation)
+         ("C-c e t" . lsp-find-type-definition)))
+  
 
 (use-package company-lsp :commands company-lsp)
 
 (use-package lsp-ui
                                         ;  :requires lsp-mode flycheck
   :config
+  (defvar lsp-ui-flycheck-enable)
+  (defvar lsp-ui-flycheck-live-reporting)
   (setq lsp-ui-doc-enable t
         lsp-ui-doc-use-childframe t
         lsp-ui-doc-delay 1.5    ;; delay time before func sig pops up
@@ -509,6 +445,7 @@
   :ensure t
   :mode (("\\.html\\'" . web-mode))
   :config
+  (defvar web-mode-enable-comment-keywords)
   (setq web-mode-markup-indent-offset 2
         web-mode-css-indent-offset 2
         web-mode-code-indent-offset 2
@@ -537,8 +474,10 @@
 (use-package vue-mode)
 (use-package vue-html-mode)
 
+(defvar vue-mode-packages)
 (setq vue-mode-packages
       '(vue-mode))
+(defvar vue-mode-excluded-packages)
 (setq vue-mode-excluded-packages '())
 (defun vue-mode/init-vue-mode ()
   "Initialize my package"
@@ -592,9 +531,10 @@
  '(ag-reuse-buffers t t)
  '(ag-reuse-window t t)
  '(custom-safe-themes
-   '("628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))
+   '("9efb2d10bfb38fe7cd4586afb3e644d082cbcdb7435f3d1e8dd9413cbe5e61fc" "e074be1c799b509f52870ee596a5977b519f6d269455b84ed998666cf6fc802a" "f2927d7d87e8207fa9a0a003c0f222d45c948845de162c885bf6ad2a255babfd" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))
  '(ivy-count-format "%d/%d ")
  '(ivy-use-virtual-buffers t)
  '(magit-auto-revert-mode nil)
  '(package-selected-packages
-   '(smart-mode-line yasnippet cyberpunk-theme cyberpunk-2019-theme ample-theme ivy which-key web-mode vue-mode use-package twilight-bright-theme tide subatomic256-theme solarized-theme smartparens rainbow-mode rainbow-delimiters racer protobuf-mode prettier-js powerline pbcopy molokai-theme magit lsp-ui js2-mode hungry-delete gotest go-tag go-snippets go-guru go-dlv flymake-go flycheck-rust evil diminish dap-mode counsel company-quickhelp company-posframe company-lsp company-go company-box color-theme-sanityinc-tomorrow cargo autopair all-the-icons ag 4clojure)))
+   '(doom-themes smart-mode-line yasnippet cyberpunk-theme cyberpunk-2019-theme ample-theme ivy which-key web-mode vue-mode use-package twilight-bright-theme tide subatomic256-theme solarized-theme smartparens rainbow-mode rainbow-delimiters racer protobuf-mode prettier-js powerline pbcopy molokai-theme magit lsp-ui js2-mode hungry-delete gotest go-tag go-guru go-dlv flycheck-rust evil diminish dap-mode counsel company-quickhelp company-posframe company-lsp company-go company-box color-theme-sanityinc-tomorrow cargo autopair all-the-icons ag 4clojure))
+ '(warning-suppress-types '((bytecomp) (bytecomp) (bytecomp))))
