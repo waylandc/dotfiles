@@ -76,12 +76,6 @@
   :ensure nil
   :hook (after-init . server-mode))
 
-;; editing mode
-;; WC TODO Mar 5, remove this as I don't think it does anything
-;; Ignore split window horizontally
-;;(setq split-width-threshold nil)
-;;(setq split-width-threshold 160)
-
 ;; Default Encoding
 (prefer-coding-system 'utf-8-unix)
 (set-locale-environment "en_US.UTF-8")
@@ -109,8 +103,8 @@
 (setq frame-title-format nil)
 (setq ring-bell-function 'ignore)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets) ; Show path if names are same
-(setq adaptive-fill-regexp "[ t]+|[ t]*([0-9]+.|*+)[ t]*")
-(setq adaptive-fill-first-line-regexp "^* *$")
+;;(setq adaptive-fill-regexp "[ t]+|[ t]*([0-9]+.|*+)[ t]*")
+;;(setq adaptive-fill-first-line-regexp "^* *$")
 (setq sentence-end "\\([。、！？]\\|……\\|[,.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*")
 (setq sentence-end-double-space nil)
 (setq delete-by-moving-to-trash t)    ; Deleting files go to OS's trash folder
@@ -268,10 +262,9 @@
   :ensure t
   :diminish company-mode
   :config
-  (setq company-selection-wrap-around t)
+  (setq company-idle-delay 1)
   (defvar company-minimum-prefex-length)
   (setq company-minimum-prefex-length 1)
-  (setq company-tooltip-align-annotations t)
   (add-hook 'after-init-hook #'global-company-mode)
   )
 
@@ -298,8 +291,8 @@
         ("C-i"      . company-indent-or-complete-common)
         ("C-M-i"    . company-indent-or-complete-common)
         )
-  :hook ((go-mode . lsp)
-         (go-mode . smartparens-mode)))
+  :hook ((go-mode . lsp)))
+         ;;(go-mode . smartparens-mode)))
    
   
 ;;  :config
@@ -365,45 +358,36 @@
 
 (use-package lsp-mode
   :ensure t
-  :commands lsp
     ;; reformat code and add missing (or remove old) imports
-  :hook ((before-save . lsp-format-buffer)
-         (before-save . lsp-organize-imports))
-  :bind (("C-c d" . lsp-describe-thing-at-point)
-         ("C-c e n" . flymake-goto-next-error)
-         ("C-c e p" . flymake-goto-prev-error)
-         ("C-c e r" . lsp-find-references)
-         ("C-c e R" . lsp-rename)
-         ("C-c e i" . lsp-find-implementation)
-         ("C-c e t" . lsp-find-type-definition)))
-  
+  :config
+  (add-hook 'go-mode-hook #'lsp)
+    (add-hook 'rust-mode-hook #'lsp))
+
+;;Set up before-save hooks to format buffer and add/delete imports.
+;;Make sure you don't have other gofmt/goimports hooks enabled.
+
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+;;(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
 (use-package company-lsp :commands company-lsp)
 
 (use-package lsp-ui
-                                        ;  :requires lsp-mode flycheck
-  :config
+  :ensure t
+  :after (lsp-mode)
+  :commands lsp-ui-mode
+  :init
+  (defvar lsp-ui-side-enable)
   (defvar lsp-ui-flycheck-enable)
-  (defvar lsp-ui-flycheck-live-reporting)
   (setq lsp-ui-doc-enable t
         lsp-ui-doc-use-childframe t
-        lsp-ui-doc-delay 1.5    ;; delay time before func sig pops up
-        lsp-ui-doc-max-width 40   ;; width of popup
-        lsp-ui-doc-max-height 10  ;; height of popup
-        lsp-ui-doc-position 'top  ;; top, bottom, at-point
         lsp-ui-doc-include-signature t
-                                        ;      lsp-ui-sideline-enable t
-                                        ;      lsp-ui-sideline-ignore-duplicate t
-                                        ;      lsp-ui-sideline-show-symbol nil
-                                        ;      lsp-ui-sideline-show-hover t
-                                        ;      lsp-ui-sideline-show-diagnostics nil
-                                        ;      lsp-ui-doc-use-webkit t
-        lsp-ui-flycheck-enable t
-        lsp-ui-flycheck-list-position 'right
-        lsp-ui-flycheck-live-reporting t
         lsp-ui-peek-enable t
-        lsp-ui-peek-list-width 60
-        lsp-ui-peek-peek-height 25)
+        lsp-ui-side-enable t
+        lsp-ui-sideline-show-hover nil
+        lsp-ui-flycheck-enable t)
+        ;;lsp-ui-imenu-enable t
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
 ;; Tide is dev environment for JS/TS, providing completions, jump to defn
@@ -431,15 +415,6 @@
   :ensure t
   :config
   (add-hook 'web-mode-hook 'prettier-js-mode))
-;; prettier rules should be project specific and kept in .prettierrc
-;; (setq prettier-js-args '(
-;;                          "--trailing-comma" "es5"
-;;                          "--bracket-spacing" "true"
-;;                          "--single-quote" "true"
-;;                          "--no-semi" "false"
-;;                          "--jsx-single-quote" "true"
-;;                          "--jsx-bracket-same-line" "true"
-;;                          "--print-width" "100")))
 
 (use-package web-mode
   :ensure t
@@ -515,6 +490,15 @@
                                         ;(use-package dap-lldb :ensure t)
 
 (use-package org)
+(setq org-todo-keywords
+      '((sequence "STARTED(s)" "TODO(t)" "WAITING(w@/!)" "|" "DONE(x!)" "CANCELLED(c)")))
+(setq org-todo-keyword-faces
+      '(("TODO" . (foreground "green" :weight bold))
+        ("DONE" . (:foreground "cyan" :weight bold))
+        ("WAITING" . (:foreground "red" :weight bold))
+        ("CANCELLED" . (:foreground "gray"))))
+(setq org-log-time 'time)
+
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
