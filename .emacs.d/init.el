@@ -35,9 +35,9 @@
 (require 'bind-key)
 
 ;;(use-package monokai-theme :ensure t)
-(use-package doom-themes :defer t
-  :init
-  (load-theme 'doom-material t))
+ (use-package doom-themes :defer t
+   :init
+   (load-theme 'doom-challenger-deep t))
 
 
 (defvar evil-want-C-u-scroll)
@@ -97,6 +97,7 @@
 (tool-bar-mode 0)
 (menu-bar-mode 0)
 (display-time-mode 1)
+(set-fringe-mode 10)
 (defun display-startup-echo-area-message () 
   (message ""))
 (xterm-mouse-mode 1)
@@ -118,6 +119,16 @@
 ;;(setq-default indent-tabs-mode t)   ; use space
 ;;(setq-default tab-width 4)
 (defalias 'yes-or-no-p #'y-or-n-p)
+
+;; enable line numbers
+(column-number-mode)
+(global-display-line-numbers-mode t)
+
+;; don't warn for following symlinks
+(set vc-follow-symlinks t)
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
 
 ;; Extension mappings
 ;;(add-to-list 'auto-mode-alist '("\\.org\\" . org-mode))
@@ -151,6 +162,7 @@
          ("C-x C-b" . helm-buffers-list)
          ("C-x b" . helm-buffers-list)
          ("M-y" . helm-show-kill-ring)
+         ;;("C-x C-f" . helm-find-files)
          ("M-x" . helm-M-x)
          ("C-x c o" . helm-occur)
          ("C-x c s" . helm-swoop)
@@ -189,6 +201,11 @@
 ;; this is fairly useless now that I mainly use in terminal
 (if (display-graphic-p)
     (progn
+      ;; keybinding to scale text is C+M+- C+M+=
+      (use-package default-text-scale
+        :defer 1
+        :config
+          (default-text-scale-mode))
       ;; UI parts
       ;; set initial position of gui window
       (setq initial-frame-alist
@@ -320,6 +337,7 @@
   (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 (use-package rust-mode :ensure t
+  :mode "\\.rs\\'"
   :config
   (setq-default indent-tabs-mode nil	;; rustfmt takes care of spaces, just don't use tabs
                 company-idle-delay 1         		;; wait 1s before company popup
@@ -489,16 +507,52 @@
                                         ;    (tooltip-mode 1))
                                         ;(use-package dap-lldb :ensure t)
 
-(use-package org)
-(setq org-todo-keywords
-      '((sequence "STARTED(s)" "TODO(t)" "WAITING(w@/!)" "|" "DONE(x!)" "CANCELLED(c)")))
-(setq org-todo-keyword-faces
-      '(("TODO" . (foreground "green" :weight bold))
-        ("DONE" . (:foreground "cyan" :weight bold))
-        ("WAITING" . (:foreground "red" :weight bold))
-        ("CANCELLED" . (:foreground "gray"))))
-(setq org-log-time 'time)
+;; which-key provides overview of which keybindings are available based
+;; on the prefix keys you entered
+(use-package which-key
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 0.3))
 
+(defun wc/org-mode-setup ()
+  (org-indent-mode)
+  (variable-pitch-mode 1)
+  (auto-fill-mode 0)
+  (visual-line-mode 1)
+  (setq evil-auto-indent nil)
+  (diminish org-indent-mode))
+
+(use-package org
+:defer t
+:hook (org-mode . wc/org-mode-setup)
+:config
+  (defvar org-log-time)
+  (setq org-todo-keywords
+            '((sequence "STARTED(s)" "TODO(t)" "WAITING(w@/!)" "|" "DONE(x!)" "CANCELLED(c)"))
+        org-todo-keyword-faces
+            '(("TODO" . (foreground "green" :weight bold))
+            ("DONE" . (:foreground "cyan" :weight bold))
+            ("WAITING" . (:foreground "red" :weight bold))
+            ("CANCELLED" . (:foreground "gray")))
+        org-startup-folded 'content
+        org-hide-block-startup nil    
+        org-src-fontify-natively t
+        org-log-time 'time))
+
+(use-package org-bullets
+  :after org
+  :hook (org-mode . org-bullets-mode)
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+;; Replace list hyphen with dot
+(font-lock-add-keywords 'org-mode
+                         '(("^ *\\([-]\\) "
+                          (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) \"•\"))))))
+
+;; make sure org-indent face is available
+(require 'org-indent)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -515,10 +569,11 @@
  '(ag-reuse-buffers t t)
  '(ag-reuse-window t t)
  '(custom-safe-themes
-   '("9efb2d10bfb38fe7cd4586afb3e644d082cbcdb7435f3d1e8dd9413cbe5e61fc" "e074be1c799b509f52870ee596a5977b519f6d269455b84ed998666cf6fc802a" "f2927d7d87e8207fa9a0a003c0f222d45c948845de162c885bf6ad2a255babfd" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))
+   '("a3b6a3708c6692674196266aad1cb19188a6da7b4f961e1369a68f06577afa16" "1623aa627fecd5877246f48199b8e2856647c99c6acdab506173f9bb8b0a41ac" "d88049c628f3a8a92f9e46982d3e891867e4991de2b3a714f29f9f5eb91638c1" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "6b80b5b0762a814c62ce858e9d72745a05dd5fc66f821a1c5023b4f2a76bc910" "2f1518e906a8b60fac943d02ad415f1d8b3933a5a7f75e307e6e9a26ef5bf570" "4bca89c1004e24981c840d3a32755bf859a6910c65b829d9441814000cf6c3d0" "bf387180109d222aee6bb089db48ed38403a1e330c9ec69fe1f52460a8936b66" "990e24b406787568c592db2b853aa65ecc2dcd08146c0d22293259d400174e37" "37a4701758378c93159ad6c7aceb19fd6fb523e044efe47f2116bc7398ce20c9" "74ba9ed7161a26bfe04580279b8cad163c00b802f54c574bfa5d924b99daa4b9" "6c3b5f4391572c4176908bb30eddc1718344b8eaff50e162e36f271f6de015ca" "9efb2d10bfb38fe7cd4586afb3e644d082cbcdb7435f3d1e8dd9413cbe5e61fc" "e074be1c799b509f52870ee596a5977b519f6d269455b84ed998666cf6fc802a" "f2927d7d87e8207fa9a0a003c0f222d45c948845de162c885bf6ad2a255babfd" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" default))
  '(ivy-count-format "%d/%d ")
  '(ivy-use-virtual-buffers t)
  '(magit-auto-revert-mode nil)
+ '(org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●") t)
  '(package-selected-packages
-   '(doom-themes smart-mode-line yasnippet cyberpunk-theme cyberpunk-2019-theme ample-theme ivy which-key web-mode vue-mode use-package twilight-bright-theme tide subatomic256-theme solarized-theme smartparens rainbow-mode rainbow-delimiters racer protobuf-mode prettier-js powerline pbcopy molokai-theme magit lsp-ui js2-mode hungry-delete gotest go-tag go-guru go-dlv flycheck-rust evil diminish dap-mode counsel company-quickhelp company-posframe company-lsp company-go company-box color-theme-sanityinc-tomorrow cargo autopair all-the-icons ag 4clojure))
+   '(default-text-scale doom-themes smart-mode-line yasnippet cyberpunk-theme cyberpunk-2019-theme ample-theme ivy which-key web-mode vue-mode use-package twilight-bright-theme tide subatomic256-theme solarized-theme smartparens rainbow-mode rainbow-delimiters racer protobuf-mode prettier-js pbcopy molokai-theme magit lsp-ui js2-mode hungry-delete gotest go-tag go-guru go-dlv flycheck-rust evil diminish dap-mode counsel company-quickhelp company-posframe company-lsp company-go company-box color-theme-sanityinc-tomorrow cargo autopair all-the-icons ag 4clojure))
  '(warning-suppress-types '((bytecomp) (bytecomp) (bytecomp))))
