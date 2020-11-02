@@ -51,7 +51,7 @@
 
 (use-package ivy)
 
-;; setup ivy, counsel and swiper for completion and search
+;; setup ivy, aounsel and swiper for completion and search
 (use-package counsel
   :diminish ivy-mode counsel-mode
   :bind
@@ -64,13 +64,14 @@
   (ivy-count-format "%d/%d "))
 
 ;; ag is a faster grep tool to find text in files
+;; brew install the_silver_searcher
 (use-package ag
   :custom
   (ag-highlight-search t)
   (ag-reuse-buffers t)
   (ag-reuse-window t)
   :bind
-  ("M-s a" . ag-project)
+  ("M-s a" . a-project)
   :config
   (use-package wgrep-ag))
 
@@ -98,7 +99,7 @@
 (setq inhibit-startup-echo-area-message t)
 (setq initial-scratch-message nil)
 (tool-bar-mode 0)
-(menu-bar-mode 1)
+(menu-bar-mode 0)
 (display-time-mode 1)
 (set-fringe-mode 10)
 (defun display-startup-echo-area-message () 
@@ -308,11 +309,11 @@
         ("M-."      . godef-jump-other-window)
         ; navigate backwards after godef-jump
         ("M-*"      . pop-tag-mark)
-        ("C-c h"    . go-guru-hl-identifier)
+        ;WC conflict with helm-mini ("C-c h"    . go-guru-hl-identifier)
         ("C-c d"    . lsp-describe-thing-at-point)
         ("C-c g"    . godoc)
         ;      ("C-c P"   . my-godoc-package)
-        ("C-i"      . company-indent-or-complete-common)
+        ; WC I think this conflicts use C-M-i ("C-i"      . company-indent-or-complete-common)
         ("C-M-i"    . company-indent-or-complete-common)
         )
   :hook ((go-mode . lsp)))
@@ -363,9 +364,10 @@
     (add-hook 'racer-mode-hook #'company-mode)
     ))
 
-;; Map TAB key to completions.
-                                        ;(local-set-key (kbd "TAB") 'company-indent-or-complete-common)
-                                        ;(setq company-tooltip-align-annotations t)
+;; WC doesn't work (need to hit ENTER)
+;;Map TAB key to completions.
+;(local-set-key (kbd "TAB") 'company-indent-or-complete-common)
+;(setq company-tooltip-align-annotations t)
 
 ;; Path to rust source.
 (when (equal system-type 'gnu/linux)
