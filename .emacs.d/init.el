@@ -45,6 +45,9 @@
 (use-package evil :ensure
   :init
   (evil-mode 1))
+(with-eval-after-load 'evil-maps
+  (define-key evil-normal-state-map (kbd "M-.") nil)
+  (define-key evil-normal-state-map (kbd "C-.") nil))
 
 (use-package ivy)
 
@@ -95,7 +98,7 @@
 (setq inhibit-startup-echo-area-message t)
 (setq initial-scratch-message nil)
 (tool-bar-mode 0)
-(menu-bar-mode 0)
+(menu-bar-mode 1)
 (display-time-mode 1)
 (set-fringe-mode 10)
 (defun display-startup-echo-area-message () 
@@ -285,10 +288,10 @@
   (add-hook 'after-init-hook #'global-company-mode)
   )
 
-;(use-package company-box
-;  :after company
-;  :diminish
-;  :hook (company-mode . company-box-mode))
+(use-package company-box
+  :after company
+  :diminish
+  :hook (company-mode . company-box-mode))
 
 (use-package go-guru :after go-mode)
 
@@ -300,11 +303,15 @@
         company-idle-delay 1)         ; wait 1s before company popup
   :bind
   (:map go-mode-map
-        ("M-."      . go-guru-definition)
+        ;WC I think this is same as godef-jump ("M-."      . go-guru-definition)
+        ;WC opens new buffer ("M-."      . godef-jump)
+        ("M-."      . godef-jump-other-window)
+        ; navigate backwards after godef-jump
+        ("M-*"      . pop-tag-mark)
         ("C-c h"    . go-guru-hl-identifier)
         ("C-c d"    . lsp-describe-thing-at-point)
         ("C-c g"    . godoc)
-                                        ;      ("C-c P"   . my-godoc-package)
+        ;      ("C-c P"   . my-godoc-package)
         ("C-i"      . company-indent-or-complete-common)
         ("C-M-i"    . company-indent-or-complete-common)
         )
@@ -529,7 +536,7 @@
 :config
   (defvar org-log-time)
   (setq org-todo-keywords
-            '((sequence "STARTED(s)" "TODO(t)" "WAITING(w@/!)" "|" "DONE(x!)" "CANCELLED(c)"))
+            '((sequence "STARTED(s)" "TODO(t)" "|" "WAITING(w@/!)" "DONE(x!)" "CANCELLED(c)"))
         org-todo-keyword-faces
             '(("TODO" . (foreground "green" :weight bold))
             ("DONE" . (:foreground "cyan" :weight bold))
