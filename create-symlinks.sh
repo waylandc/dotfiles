@@ -68,6 +68,19 @@ else
   ln -sf $PWD/.emacs.d $HOME/.emacs.d
 fi
 
+#doom emacs
+if [ -d "$HOME/.doom.d" ]; then
+  echo ".doom.d exists\n"
+  if [ -L "$HOME/.doom.d" ]; then
+    echo ".doom.d symlink already exists\n"
+  else
+    echo "ERROR: $HOME/.doom.d is a dir, NOT a symlink. Check or remove before retrying\n"
+  fi
+else
+  echo ".doom.d doesn't exist, creating symlink\n"
+  ln -sf $PWD/.doom.d $HOME/.doom.d
+fi
+
 #tmux
 if [ -f "$HOME/.tmux.conf" ]; then
   if [ -L "$HOME/.tmux.conf" ]; then
