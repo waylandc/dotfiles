@@ -82,16 +82,6 @@ else
 fi
 
 #tmux
-if [ -f "$HOME/.tmux.conf" ]; then
-  if [ -L "$HOME/.tmux.conf" ]; then
-    ln -sf $PWD/.tmux/slim.tmux.conf $HOME/.tmux.conf
-  else
-    echo "ERROR: $HOME/.tmux.conf is a file, NOT a symlink. Check or remove before retrying\n"
-  fi
-else
-  ln -sf $PWD/.tmux/slim.tmux.conf $HOME/.tmux.conf
-fi
-
 if [ -d "$HOME/.tmux" ]; then
   if [ -L "$HOME/.tmux" ]; then
     ln -sf $PWD/.tmux $HOME/.tmux
@@ -99,6 +89,18 @@ if [ -d "$HOME/.tmux" ]; then
     echo "ERROR: $HOME/.tmux is a dir, NOT a symlink. Check or remove before retrying\n"
   fi
 else
-  echo "no home/.tmux dir\n"
+  echo ".tmux doesn't exist, creating\n"
   ln -sf $PWD/.tmux $HOME/.tmux
 fi
+
+#if [ -f "$HOME/.tmux.conf" ]; then
+#  if [ -L "$HOME/.tmux.conf" ]; then
+#    ln -sf $PWD/.tmux/slim.tmux.conf $HOME/.tmux.conf
+#  else
+#    echo "ERROR: $HOME/.tmux.conf is a file, NOT a symlink. Check or remove before retrying\n"
+#  fi
+#else
+#  echo ".tmux.conf doesn't exist, creating symlink\n"
+#  ln -sf $PWD/.tmux/slim.tmux.conf $HOME/.tmux.conf
+#fi
+
