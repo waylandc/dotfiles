@@ -176,6 +176,8 @@
 (setq line-move-visual nil)   ; To be required by track-eol
 (setq-default kill-whole-line t)  ; Kill line including '\n'
 (setq select-enable-clipboard t)
+;; make ESC quit prompts
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 ;; always display images inline
 ;; this can be done locally within the file by using:
