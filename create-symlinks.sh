@@ -25,7 +25,7 @@ fi
 
 if [ -f "$HOME/.zshrc" ]; then
   if [ -L "$HOME/.zshrc" ]; then
-    ln -sf $PWD/.zshrc $HOME/.bashrc
+    ln -sf $PWD/.zshrc $HOME/.zshrc
   else
     echo "ERROR: $HOME/.zshrc is a file, NOT a symlink. Check or remove before retrying\n"
   fi
