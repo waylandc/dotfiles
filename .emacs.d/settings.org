@@ -1,0 +1,517 @@
+#+TITLE: Emacs configuration file
+#+AUTHOR: Wayland Chan
+#+STARTUP: overview
+
+* Setup use-package and repositories
+#+BEGIN_SRC emacs-lisp
+(eval-and-compile
+  (setq load-prefer-newer t
+        package-user-dir "~/.emacs.d/elpa"
+        package--init-file-ensured t
+        package-enable-at-startup nil)
+
+  (unless (file-directory-p package-user-dir)
+    (make-directory package-user-dir t)))
+
+(eval-and-compile
+  (setq load-path (append load-path (directory-files package-user-dir t "^[^.]" t))))
+
+(eval-when-compile
+  (require 'package)
+  (setq package-check-signature nil)
+  (package-initialize)
+  ;;  (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package)
+    (package-install 'diminish)
+    (package-install 'quelpa)
+    ;;; bind-key.el --- A simple way to manage personal keybindings
+    (package-install 'bind-key))
+
+  (defvar use-package-always-ensure)
+  (setq use-package-always-ensure t)
+  (defvar use-package-expand-minimally)
+  (setq use-package-expand-minimally t)
+
+  (require 'use-package))
+#+END_SRC
+
+
+* Auto completion configuration
+#+BEGIN_SRC emacs-lisp
+  ;; autocompletion framework instead of using ivy or helm
+  (use-package vertico
+    :ensure t
+    :custom
+      (vertico-cycle t)
+    :init
+    (vertico-mode))
+
+  ;; saves a history of recent autocompletions
+  (use-package savehist
+    :init
+    (savehist-mode))
+
+  ;; enhance vertico lists with file details and additional info
+  (use-package marginalia
+    :after vertico
+    :ensure t
+    :custom
+    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+    :init
+    (marginalia-mode))
+
+  ;; https://github.com/minad/consult
+  (use-package consult
+    :ensure t
+    :bind (
+      ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+      ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+      ("M-g e" . consult-compile-error)
+      ("M-g g" . consult-goto-line))            ;; orig. goto-line
+    ;;:hook (completion-list-mode . consult-preview-at-point-mode)
+    :init
+    (setq register-preview-delay 0.5
+	  register-preview-function #'consult-register-format))
+
+  (use-package orderless
+    :after vertico
+    :ensure t
+    :init
+    (customize-set-variable 'completion-styles '(orderless))
+    (customize-set-variable 'completion-category-overrides '((file (styles . (partial-completion)))))
+    (setq completion-category-defaults nil))
+
+  (use-package company
+      :ensure t)
+#+END_SRC
+
+
+* UI configuration
+Any UI related configuration should be found in here.
+** General UI
+#+BEGIN_SRC emacs-lisp
+;; Quiet Startup
+(setq inhibit-startup-message t)
+(setq inhibit-startup-echo-area-message t)
+(setq initial-scratch-message nil)
+(tool-bar-mode 0)
+(menu-bar-mode 0)
+(display-time-mode 1)
+(set-fringe-mode 10)
+(defun display-startup-echo-area-message ()
+  (message ""))
+(require 'diminish)
+(require 'bind-key)
+(setq byte-compile-warnings '(cl-functions))
+
+(defun my/reload-emacs-init ()
+  (interactive)
+  (load-file "~/.emacs.d/init.el"))
+
+(defun zoom-in ()
+  (interactive)
+  (let ((x (+ (face-attribute 'default :height) 10)))
+    (set-face-attribute 'default nil :height x)))
+
+(defun zoom-out ()
+  (interactive)
+  (let ((x (- (face-attribute 'default :height) 10)))
+    (set-face-attribute 'default nil :height x)))
+
+(define-key global-map (kbd "C-=") 'zoom-in)
+(define-key global-map (kbd "C--") 'zoom-out)
+
+(use-package all-the-icons)
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+;; enable line numbers
+(column-number-mode)
+;;(global-display-line-numbers-mode t)
+
+;; found this func from stackoverflow to centre window on monitor
+(defun frame-center ()
+  "Center the current frame."
+  (interactive)
+  (let* ((dw (display-pixel-width))
+         (dh (display-pixel-height))
+         (f  (selected-frame))
+         (fw (frame-pixel-width f))
+         (fh (frame-pixel-height f))
+         (x  (- (/ dw 2) (/ fw 2)))
+         (y  (- (/ dh 2) (/ fh 2))))
+    (message (format "dw %d dh %d fw %d fh %d x %d y %d" dw dh fw fh x y))
+    (set-frame-position f x y)))
+
+;; this is fairly useless now that I mainly use in terminal
+(when (display-graphic-p)
+  (progn
+    ;; keybinding to scale text is C+M+- C+M+=
+    (use-package default-text-scale
+      :defer 1
+      :config
+      (default-text-scale-mode))
+    ;; UI parts
+    ;; set initial position of gui window
+    (setq initial-frame-alist
+      '(
+        (right . 5)
+        (top . 35)
+        (tool-bar-lines . 0)
+        (width . 130) ;; chars
+        (height . 70) ;; lines
+      ))
+    (setq default-frame-alist
+      '(
+        (tool-bar-lines . 0)
+        (width . 130)
+        (height . 70)
+      ))
+    (toggle-scroll-bar 0)
+    ;; (frame-center)
+;; WC this causes warnings on startup so disabling for now
+;;    (defun font-exists-p (font) "check if font exists" (if (null(x-list-fonts font)) nil t))
+;;    (cond
+;;      ((if (font-exists-p "Consolas") (set-face-attribute 'default nil :family "Consolas" :height 110)))
+;;      ((if (font-exists-p "Lucida Sans Typewriter") (set-face-attribute 'default nil :font "Lucida Sans Typewriter-14")))
+;;     ((if (font-exists-p "Hack Nerd Font") (set-face-attribute 'default nil :font "Hack Nerd Font-14")))
+;;      ((if (font-exists-p "Helvetica Neue") (set-face-attribute 'default nil :font "Helvetica Neue-14")))
+;;      ((if (font-exists-p "Optima") (set-face-attribute 'default nil :font "Optima-14")))
+;;      ((if (font-exists-p "Roboto") (set-face-attribute 'default nil :font "Roboto Mono-12")))
+;;      ((if (font-exists-p "Source Code Pro") (set-face-attribue 'default nil :font "Source Code Pro-12")))
+;;      ((if (font-exists-p "Consolas") (set-face-attribute 'default nil :family "Consolas" :height 110))))
+    ))
+#+END_SRC
+
+** Evil Mode
+#+BEGIN_SRC
+(use-package evil :ensure
+  :init
+  (evil-mode 1))
+
+;; WC I don't know what these maps do anymore
+  (with-eval-after-load 'evil-maps
+    (define-key evil-normal-state-map (kbd "M-.") nil)
+    (define-key evil-normal-state-map (kbd "C-.") nil))
+
+(defvar evil-want-C-u-scroll)
+(setq evil-want-C-u-scroll t)
+
+;; evil-jump-forward is mapped to TAB which conflicts with ORG mode (only in terminal for some reason)
+;; https://emacs.stackexchange.com/questions/69282/evil-mode-unmap-tab-key-from-evil-jump-forward
+(setq evil-want-C-i-jump nil)
+#+END_SRC
+
+** Themes
+#+BEGIN_SRC emacs-lisp
+
+(setq custom-safe-themes t)
+(use-package doom-themes)
+(load-theme 'doom-acario-dark t)
+#+END_SRC
+
+** Golden Ratio
+When alternating buffers, this will expand the active one and shrink the in-active one for better visibility.
+
+#+BEGIN_SRC emacs-lisp
+(use-package golden-ratio
+  :ensure t
+  :hook (after-init . golden-ratio-mode)
+  :custom
+  (golden-ratio-exclude-modes '(occur-mode)))
+#+END_SRC
+
+* General Configuration
+#+BEGIN_SRC emacs-lisp
+(use-package server
+  :ensure nil
+  :hook (after-init . server-mode))
+
+;; Default Encoding
+(prefer-coding-system 'utf-8-unix)
+(set-locale-environment "en_US.UTF-8")
+(set-default-coding-systems 'utf-8-unix)
+(set-selection-coding-system 'utf-8-unix)
+(set-buffer-file-coding-system 'utf-8-unix)
+(set-clipboard-coding-system 'utf-8) ; included by set-selection-coding-system
+(set-keyboard-coding-system 'utf-8) ; configured by prefer-coding-system
+(set-terminal-coding-system 'utf-8) ; configured by prefer-coding-system
+(setq buffer-file-coding-system 'utf-8) ; utf-8-unix
+(setq save-buffer-coding-system 'utf-8-unix) ; nil
+(setq process-coding-system-alist
+  (cons '("grep" utf-8 . utf-8) process-coding-system-alist))
+
+(xterm-mouse-mode 1)
+(setq frame-title-format nil)
+(setq ring-bell-function 'ignore)
+(setq sentence-end "\\([。、！？]\\|……\\|[,.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*")
+(setq sentence-end-double-space nil)
+(setq delete-by-moving-to-trash t)    ; Deleting files go to OS's trash folder
+(setq make-backup-files nil)          ; Forbide to make backup files
+(setq auto-save-default nil)          ; Disable auto save
+(setq set-mark-command-repeat-pop t)  ; Repeating C-SPC after popping mark pops it again
+(setq track-eol t)      ; Keep cursor at end of lines.
+(setq line-move-visual nil)   ; To be required by track-eol
+(setq-default kill-whole-line t)  ; Kill line including '\n'
+(setq select-enable-clipboard t)
+
+;; Set tab/spaces in each language mode
+;;(setq-default indent-tabs-mode t)   ; use space
+
+;; https://dougie.io/emacs/indentation/
+;; Create a variable for our preferred tab width
+(setq custom-tab-width 4)
+;;(setq indent-tabs-mode nil)
+;;(setq tab-width 4)
+;; Two callable functions for enabling/disabling tabs in Emacs
+(defun disable-tabs () (interactive) (setq indent-tabs-mode nil))
+(defun enable-tabs  () (interactive)
+  (local-set-key (kbd "TAB") 'tab-to-tab-stop)
+  (setq indent-tabs-mode t)
+  (setq tab-width custom-tab-width))
+
+(defun enable-space-tabs  ()
+  (local-set-key (kbd "TAB") 'tab-to-tab-stop)
+  (setq indent-tabs-mode nil)
+  (setq tab-width custom-tab-width))
+
+;; Make the backspace properly erase the tab instead of
+;; removing 1 space at a time.
+(setq backward-delete-char-untabify-method 'hungry)
+(setq-default evil-shift-width custom-tab-width)
+
+(defun how-many-region (begin end regexp &optional interactive)
+  "Print number of non-trivial matches for REGEXP in region.
+  Non-interactive arguments are Begin End Regexp"
+  (interactive "r\nsHow many matches for (regexp): \np")
+  (let ((count 0) opoint)
+    (save-excursion
+      (setq end (or end (point-max)))
+      (goto-char (or begin (point)))
+      (while (and (< (setq opoint (point)) end)
+        (re-search-forward regexp end t))
+          (if (= opoint (point))
+            (forward-char 1)
+            (setq count (1+ count))))
+      (if interactive (message "%d occurrences" count))
+      count)))
+
+(defun infer-indentation-style ()
+  ;; if our source file uses tabs, we use tabs, if spaces spaces, and if
+  ;; neither, we use the current indent-tabs-mode
+  (let ((space-count (how-many-region (point-min) (point-max) "^  "))
+    (tab-count (how-many-region (point-min) (point-max) "^\t")))
+    (if (> space-count tab-count) (setq indent-tabs-mode nil))
+    (if (> tab-count space-count) (setq indent-tabs-mode t))))
+
+
+;; Hooks to Enable Tabs
+(add-hook 'prog-mode-hook 'enable-tabs)
+
+;; Hooks to Disable Tabs
+(add-hook 'lisp-mode-hook 'disable-tabs)
+(add-hook 'emacs-lisp-mode-hook 'disable-tabs)
+
+;; Make the backspace properly erase the tab instead of
+;; removing 1 space at a time.
+(setq backward-delete-char-untabify-method 'hungry)
+(setq-default evil-shift-width custom-tab-width)
+
+;; WARNING: This will change your life
+;; (OPTIONAL) Visualize tabs as a pipe character - "|"
+;; This will also show trailing characters as they are useful to spot.
+(defvar whitespace-style '(face tabs tab-mark trailing))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(whitespace-tab ((t (:foreground "#636363")))))
+(defvar whitespace-display-mappings
+  '((tab-mark 9 [124 9] [92 9]))) ; 124 is the ascii ID for '\|'
+(global-whitespace-mode) ; Enable whitespace mode everywhere
+;; end tabs config
+
+(defalias 'yes-or-no-p #'y-or-n-p)
+
+;; don't warn for following symlinks
+(set vc-follow-symlinks t)
+
+;; Extension mappings
+;;(add-to-list 'auto-mode-alist '("\\.org\\" . org-mode))
+;;(add-to-list 'auto-mode-alist '("\\.md\\" . markdown-mode))
+;; (add-to-list 'auto-mode-alist '("\\.markdown\\" . markdown-mode))
+
+(use-package smart-mode-line)
+
+;; Automatically reload files was modified by external program
+(use-package autorevert
+  :ensure nil
+  :diminish
+  :hook (after-init . global-auto-revert-mode))
+
+;; which-key will show you what commands available if you pause 1s in middle of cmd
+(use-package which-key
+  :diminish which-key-mode
+  :init
+  (which-key-mode)
+  (which-key-setup-minibuffer)
+  :config
+  (setq which-key-idle-delay 0.3))
+
+(defun wslp ()
+  "Returns non-nil when the current system is WSL"
+  (and (featurep :system 'linux)
+       (string-match-p "Microsoft"
+        (shell-command-to-string "uname -a"))))
+
+;;;
+;;; WSL Fixes
+;;;
+
+(when (wslp)
+  ; WSLg breaks copy-paste from Emacs into Windows
+  ; see: https://www.lukas-barth.net/blog/emacs-wsl-copy-clipboard/
+  (setq select-active-regions nil
+        select-enable-clipboard 't
+        select-enable-primary nil
+        interprogram-cut-function #'gui-select-text))
+
+#+END_SRC
+
+* Org mode configuration
+#+BEGIN_SRC emacs-lisp
+  (defun wc/org-mode-setup ()
+    (defvar org-indent-mode)
+    (variable-pitch-mode 1)
+    (auto-fill-mode 0)
+    (visual-line-mode 1)
+    (setq evil-auto-indent nil)
+    (diminish org-indent-mode))
+
+  (use-package org
+    :defer t
+    :hook (org-mode . wc/org-mode-setup)
+    :config
+    (defvar org-log-time)
+    (setq org-todo-keywords
+      '((sequence "STARTED(s)" "TODO(t)" "|" "WAITING(w@/!)" "DONE(x!)" "CANCELLED(c)"))
+      org-todo-keyword-faces
+      '(("TODO" . (foreground "green" :weight bold))
+      ("DONE" . (:foreground "cyan" :weight bold))
+      ("WAITING" . (:foreground "red" :weight bold))
+      ("CANCELLED" . (:foreground "gray")))
+      org-startup-folded 'content
+      org-hide-block-startup nil
+      org-src-fontify-natively t
+      org-log-time 'time))
+
+  (setq org-tag-alist '(
+    ("@work" . ?w)
+    ("@crypto" . ?C)
+    ("@golf" . ?g)
+    ("@programming" . ?p)))
+
+  (use-package org-bullets
+    :after org
+    :hook (org-mode . org-bullets-mode)
+    :custom
+    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+  ;; Replace list hyphen with dot
+  (font-lock-add-keywords
+    'org-mode '(("^ *\\([-]\\) "
+      (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) \"•\"))))))
+
+  ;; make sure org-indent face is available
+  (require 'org-indent)
+
+  ;; rainbow mode is a minor mode which displays strings representing colors with the color as background
+  (use-package rainbow-mode
+    :diminish rainbow-mode
+    :config
+    (add-hook 'prog-mode-hook 'rainbow-mode))
+
+  ;; always display images inline
+  (setq org-startup-with-inline-images t)
+#+END_SRC
+
+* Programming Configuration
+** Source Control
+#+BEGIN_SRC emacs-lisp
+;; Magit
+(use-package magit
+  :custom
+  (magit-auto-revert-mode nil)
+  :bind
+  ("M-g s" . magit-status))
+#+END_SRC
+
+
+** Programming Languages
+Here are all the language specific configurations
+*** LSP
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-mode
+      :ensure t
+      :hook ((clojure-mode . lsp)
+      (clojurec-mode . lsp)
+      (clojurescript-mode . lsp))
+      :config
+      ;; add paths to your local installation of tools like lein
+      (setenv "PATH" (concat
+      "/usr/bin" path-separator
+      (getenv "PATH")))
+      (dolist (m '(clojure-mode
+      clojurec-mode
+      clojurescript-mode
+      clojurex-mode))
+      (add-to-list 'lsp-language-id-configuration '(,m . "clojure")))
+      (setq lsp-clojure-server-command '("/usr/bin/clojure-lsp")))
+#+END_SRC
+*** Python
+TODO
+*** Typescript/Javascript
+TODO
+
+*** TOML files used for Cargo or other config files
+#+BEGIN_SRC emacs-lisp
+(use-package toml-mode :ensure)
+#+END_SRC
+*** Clojure
+#+BEGIN_SRC emacs-lisp
+;; add CIDER
+#+END_SRC
+* macOS specific config
+#+BEGIN_SRC emacs-lisp
+(when (equal system-type 'darwin)
+  (defvar mac-command-key-is-meta)
+  (setq mac-command-key-is-meta t)
+  ;; WC these modifers aren't working. I don't notice anything different
+  ;; (setq mac-option-modifier 'super)
+  ;; (setq mac-command-modifier 'meta)
+  (defvar ns-auto-hide-menu-bar t)
+  (defvar ns-use-proxy-icon nil)
+  (setq initial-frame-alist
+        (append
+          '((ns-transparent-titlebar . t)
+            (ns-appearance . dark)
+            (vertical-scroll-bars . nil)
+            (internal-border-width . 0)))))
+
+#+END_SRC
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(completion-category-overrides '((file (styles partial-completion))))
+ '(completion-styles '(orderless))
+ '(package-selected-packages
+   '(org-indent org-bullets which-key use-package typescript-mode smartparens smart-mode-line selectrum rustic rainbow-mode rainbow-delimiters quelpa pbcopy magit lsp-ui flycheck-rust evil edit-indirect doom-themes diminish default-text-scale all-the-icons ag)))

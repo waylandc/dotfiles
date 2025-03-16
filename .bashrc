@@ -34,6 +34,7 @@ if [ "$TERM" != "linux" ] && [ -f "$GOPATH/bin/powerline-go" ]; then
 fi
 
 # Wayland's aliases
+# proto is for Golang protobufs
 alias proto='protoc --go_out=. *.proto'
 
 # PS1='\h:\W \u\$ '

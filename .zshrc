@@ -164,3 +164,5 @@ if [ -f '/Users/waylandchan/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/waylandchan/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/waylandchan/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
