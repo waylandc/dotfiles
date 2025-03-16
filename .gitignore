@@ -13,4 +13,5 @@
 .emacs.d/.lsp-session*
 .emacs.d/recentf
 .emacs.d/eln-cache
-
+.emacs.d/history
+.emacs.d/settings.el
