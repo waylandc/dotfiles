@@ -11,7 +11,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(toml-mode magit rainbow-mode org-bullets which-key smart-mode-line golden-ratio doom-themes rainbow-delimiters all-the-icons vertico orderless marginalia diminish consult)))
+   '(evil toml-mode magit rainbow-mode org-bullets which-key smart-mode-line golden-ratio doom-themes rainbow-delimiters all-the-icons vertico orderless marginalia diminish consult)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

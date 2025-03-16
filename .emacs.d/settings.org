@@ -189,8 +189,8 @@ Any UI related configuration should be found in here.
 #+END_SRC
 
 ** Evil Mode
-#+BEGIN_SRC
-(use-package evil :ensure
+#+BEGIN_SRC emacs-lisp
+(use-package evil :ensure t
   :init
   (evil-mode 1))
 
